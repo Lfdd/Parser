@@ -4,6 +4,6 @@ from selenium import webdriver
 
 #url = 'https://www.elibrary.ru/author_items.asp?authorid=679517&show_refs=1&pubrole=100&show_option=0'headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0', 'accept': '*/*'}page = requests.get(url, headers=headers)soup = BeautifulSoup(page.text, "html.parser")print(soup.find_all('span', ))i = 0while i <= 100:
 driver = webdriver.Firefox()
-driver.getl('https://www.elibrary.ru/author_items.asp?authorid=679517&show_refs=1&pubrole=100&show_option=0')
-link = driver.find_element_by_link_text('')
+driver.get('https://www.elibrary.ru/author_items.asp?authorid=679517&show_refs=1&pubrole=100&show_option=0')
+link = driver.find_element_by_link_text('2')
 link.click()
