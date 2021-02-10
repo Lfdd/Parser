@@ -1,4 +1,8 @@
-# Parser
-Пилотный проект парсера
-<p>Здесь вносятся изменения относительно доступа <a href="https://github.com/Lfdd/Parser/tree/main/wsaccess"></p>
-<p2>Здесь вносятся изменения относительно получения данных <a href="https://github.com/Lfdd/Parser/tree/main/wrkwdata"></p2>
+# Парсер научных журналов
+
+Здесь публикуются все изменения для проекта
+
+[Задачи касаемо работы с данными](https://github.com/Lfdd/Parser/tree/main/wrkwdata).
+
+[Задачи касаемо получения доступа](https://github.com/Lfdd/Parser/tree/main/wsaccess)
+
