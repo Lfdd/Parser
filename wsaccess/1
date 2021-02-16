@@ -1,13 +1,44 @@
 from bs4 import BeautifulSoup
 import requests
+import csv
+import os
+import subprocess
+import tempfile
+import shutil
+import random
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.common.exceptions import NoSuchElementException
 
+an = 1
+#while an <= 100:
+autor_page = 'https://www.elibrary.ru/author_items.asp?authorid=' + str(an)
+print(autor_page)
+useragents_list = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0',
+                   'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Iron/28.0.1550.1 Chrome/28.0.1550.1',
+                   'Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.16']
+new_useragent = random.choice(useragents_list)
+profile = webdriver.FirefoxProfile()
+profile.set_preference("general.useragent.override", new_useragent)
 options = Options()
 options.headless = True
-driver = webdriver.Firefox(options=options)
-driver.get('https://www.elibrary.ru/author_items.asp?authorid=679517&show_refs=1&pubrole=100&show_option=0')
-link = driver.find_element_by_link_text('2')
-link.click()
-with open('C:/Users/SZ/Desktop/page_source', 'w', encoding='utf-8') as f:
-    f.write(driver.page_source)
+driver = webdriver.Firefox(profile, options=options)
+next_page = '/html/body/div[3]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table/tbody/tr/td/div[4]/table/tbody/tr/td[10]/a'
+driver.get(autor_page)
+page_real = True
+
+print(an)
+
+i = 1
+tmp_dir = tempfile.mkdtemp()
+print(tmp_dir)
+while page_real:
+    try:
+        with open(tmp_dir + '/page_source' + str(i) + ".html", 'a', encoding='utf-8') as f:
+            f.write(driver.page_source)
+            i = i + 1
+            driver.find_element_by_xpath(next_page).click()
+    except NoSuchElementException:
+        page_real = False
+        print('Больше нет страниц!')
+#shutil.rmtree(tmp_dir)
