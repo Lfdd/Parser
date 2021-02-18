@@ -72,3 +72,91 @@ class AuthorParser:
             print("Sleeping for", sleep_seconds, "seconds")
 
             time.sleep(sleep_seconds)
+
+    def get_titles(self, soup):
+        title = soup.find_all('span', style="line-height:1.0;")
+        titles = []
+        for i in title:
+            titles.append(i.text)
+
+        return titles
+
+    def get_authors(self, info):
+        authors_to_save = []
+
+        for i in range(len(info)):
+            if len(info[i]) > 5:  # Check if authors exist
+                authors = info[i].find_all('i')
+                for author in authors:
+                    authors_to_save.append(author.text)
+            else:
+                authors_to_save.append('-')
+
+        return authors_to_save
+
+    def get_information(self, info):
+        info_save = []
+        for info_block in info:
+            publication_information = list(info_block.children)[-1]
+
+            if publication_information is None:
+                information_text = ""
+            else:
+                information_text = publication_information.text.strip()
+                information_text = information_text.replace('\xa0', ' ')  # Delete weird symbols
+                information_text = information_text.replace('\r\n', ' ')  # Delete rows splits
+                information_text = information_text.replace('\n', ' ')  # Delete rows splits
+            info_save.append(information_text)
+
+        return info_save
+
+    def get_links(self, info):
+        links = []
+        for info_block in info:
+            all_links = []
+            link = info_block.find_all('a')
+            for j in link:  # TODO: check if it is always a list?
+                all_links.append(j.get('href'))
+            if all_links:
+                links.append('https://www.elibrary.ru/' + all_links[0])
+            else:
+                links.append("")
+
+        return links
+
+    def save_publications(self, titles, authors, informations, links):
+        save_path = self.DATA_PATH / "processed" / self.author_id
+        save_path.mkdir(exist_ok=True)
+
+        csv_path = save_path / "publications.csv"
+
+        with open(csv_path, 'a', encoding="utf8", newline='') as csvfile:
+            wr = csv.writer(csvfile, delimiter=';')
+            for i in range(len(titles)):
+                article = [titles[i], authors[i], informations[i], links[i]]
+                wr.writerow(article)
+
+    def parse_publications(self):
+        print("Parsing publications for author", self.author_id)
+
+        for file in self.files_dir.glob("*.html"):
+            print("Reading file", file.name)
+
+            with open(file, "r", encoding="utf8") as f:
+                page_text = f.read()
+
+            soup = BeautifulSoup(page_text, "html.parser")
+            publications_table = soup.find_all('table', id="restab")[0]
+
+            rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
+            for box in rubbish:
+                box.decompose()  # Remove all inner tags
+
+            info = publications_table.find_all('td', align="left", valign="top")
+
+            titles = self.get_titles(soup)
+            authors = self.get_authors(info)
+            informations = self.get_information(info)
+            links = self.get_links(info)
+
+            self.save_publications(titles, authors, informations, links)
