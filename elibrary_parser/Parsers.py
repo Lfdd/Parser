@@ -1,7 +1,9 @@
+import csv
 from pathlib import Path
 import random
 import time
 
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
@@ -15,7 +17,7 @@ class AuthorParser:
     )
     DRIVER_PATH = "D:\\Software\\geckodriver.exe"  # TODO: generalize it
     NEXT_PAGE_LINK = '/html/body/div[3]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table/tbody/tr/td/div[4]/table/tbody/tr/td[10]/a'
-    DATA_PATH = Path("C:/Users/vladi/PycharmProjects/Parser/data/raw")  # TODO: generalize it
+    DATA_PATH = Path("C:/Users/vladi/PycharmProjects/Parser/data/")  # TODO: generalize it
 
     def __init__(self, author_id):
         self.author_id = author_id
@@ -36,7 +38,7 @@ class AuthorParser:
         self.driver = webdriver.Firefox(profile, executable_path=self.DRIVER_PATH, options=options)
 
     def create_files_dir(self):
-        self.files_dir = self.DATA_PATH / self.author_id
+        self.files_dir = self.DATA_PATH / "raw" / self.author_id
 
         print("Author's directory:", self.files_dir.absolute())
 
