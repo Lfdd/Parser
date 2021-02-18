@@ -4,3 +4,4 @@ AUTHOR_ID = "679517"
 
 parser = AuthorParser(author_id=AUTHOR_ID)
 parser.find_publications()
+parser.parse_publications()
