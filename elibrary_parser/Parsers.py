@@ -8,6 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
 
+from elibrary_parser.types import Publication
+
 
 class AuthorParser:
     USER_AGENTS = (
@@ -23,6 +25,7 @@ class AuthorParser:
         self.author_id = author_id
         self.driver = None
         self.files_dir = None
+        self.publications = []
 
         self.create_files_dir()
         self.setup_webdriver()
@@ -159,4 +162,12 @@ class AuthorParser:
             informations = self.get_information(info)
             links = self.get_links(info)
 
-            self.save_publications(titles, authors, informations, links)
+            for i in range(len(titles)):
+                self.publications.append(
+                    Publication(
+                        title=titles[i],
+                        authors=authors[i],
+                        info=informations[i],
+                        link=links[i]
+                    )
+                )
