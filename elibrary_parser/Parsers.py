@@ -27,20 +27,15 @@ class AuthorParser:
         self.create_files_dir()
         self.setup_webdriver()
         
-    def setup_webdriver(self):
-        """Defines the web browsers and options for them"""
-
-        new_useragent = random.choice(self.USER_AGENTS)
-
-        profile = webdriver.FirefoxProfile()
-        profile.set_preference("general.useragent.override", new_useragent)
-        options = Options()
-        options.headless = True
-
-        self.driver = webdriver.Firefox(profile, executable_path=self.DRIVER_PATH, options=options)
-
     def create_files_dir(self):
-        """Creates directory for the web-pages of an specific author"""
+        """Creates directory for the web-pages of an specific author
+
+        Parameters
+        ----------
+        files_dir.mkdir : Path
+            Creates a directory with "author_id" name.
+
+        """
 
         self.files_dir = self.DATA_PATH / self.author_id
 
@@ -52,11 +47,25 @@ class AuthorParser:
         """Gets the web-page
         Cycle 'while' creates "page.html" in "files_dir"
         Trying to get the next page by using "find_element_by_xpath"
-        Sleeps for a few seconds in order load properly
+        Sleeps for a few seconds in order to load properly
         While there is no specific error "NoSuchElementException"
         Which means that no page was loaded. If so stops
+
+        Parameters
+        ----------
+        driver.get : str
+            Creates a request to the page.
+
+        driver.page_source : str
+             HTML code of a page.
+
+        Raises
+        ------
+        NoSuchElementException
+            Means that there is no element defined by xpath.
+
         """
-        
+
         author_page_url = f'https://www.elibrary.ru/author_items.asp?authorid={self.author_id}'
         print("Author page URL:", author_page_url)
 
