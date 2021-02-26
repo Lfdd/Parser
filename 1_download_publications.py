@@ -11,19 +11,11 @@ publications = []
 
 for author_id in author_ids:
     parser = AuthorParser(author_id=author_id, data_path="C:/Users/vladi/PycharmProjects/Parser/data/")
-    # parser.find_publications()
+    parser.find_publications()
     parser.parse_publications()
     parser.save_publications()
 
     publications.append(set(parser.publications))
-
-for author_publications in publications:
-    for publication in author_publications:
-        print(publication.title)
-        print(publication.authors)
-        print("-"*20)
-        print()
-
 
 common_publications = find_common_publications(publications)
 print("Found", len(common_publications), "common publications")
