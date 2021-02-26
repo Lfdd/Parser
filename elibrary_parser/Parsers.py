@@ -17,7 +17,7 @@ class AuthorParser:
         'Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.16',
     )
     DRIVER_PATH = "D:\\Software\\geckodriver.exe"  # TODO: generalize it
-    NEXT_PAGE_LINK = '/html/body/div[3]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table/tbody/tr/td/div[4]/table/tbody/tr/td[10]/a'
+   
 
     def __init__(self, author_id, data_path):
         self.author_id = author_id
@@ -82,7 +82,7 @@ class AuthorParser:
             page_number = page_number + 1
 
             try:
-                self.driver.find_element_by_xpath(self.NEXT_PAGE_LINK).click()
+                  self.driver.find_element_by_link_text('Следующая страница').click()
             except NoSuchElementException:
                 is_page_real = False
                 print('Больше нет страниц!')
