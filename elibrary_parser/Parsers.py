@@ -40,6 +40,9 @@ class AuthorParser:
         self.driver = webdriver.Firefox(profile, executable_path=self.DRIVER_PATH, options=options)
 
     def create_files_dir(self):
+        """Creates directory for the web-pages of an specific author
+
+        """
         self.files_dir = self.data_path / "raw" / self.author_id
 
         print("Author's directory:", self.files_dir.absolute())
@@ -47,6 +50,20 @@ class AuthorParser:
         self.files_dir.mkdir(exist_ok=True)
 
     def find_publications(self):
+        """Gets the web-page
+        Cycle 'while' creates "page.html" in "files_dir"
+        Trying to get the next page by using "find_element_by_xpath"
+        Sleeps for a few seconds in order to load properly
+        While there is no specific error "NoSuchElementException"
+        Which means that no page was loaded. If so stops
+
+        Raises
+        ------
+        NoSuchElementException
+            Means that there is no element defined by xpath.
+
+        """
+
         author_page_url = f'https://www.elibrary.ru/author_items.asp?authorid={self.author_id}'
         print("Author page URL:", author_page_url)
 
