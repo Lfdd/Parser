@@ -15,3 +15,6 @@ class Publication:
                 and self.info == other.info
                 and self.link == other.link
         )
+
+    def __hash__(self):
+        return hash(self.title) ^ hash(self.authors) ^ hash(self.info) ^ hash(self.link)
