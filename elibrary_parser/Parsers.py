@@ -1,4 +1,3 @@
-import csv
 from pathlib import Path
 import random
 import time
@@ -19,13 +18,13 @@ class AuthorParser:
     )
     DRIVER_PATH = "D:\\Software\\geckodriver.exe"  # TODO: generalize it
     NEXT_PAGE_LINK = '/html/body/div[3]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table/tbody/tr/td/div[4]/table/tbody/tr/td[10]/a'
-    DATA_PATH = Path("C:/Users/vladi/PycharmProjects/Parser/data/")  # TODO: generalize it
 
-    def __init__(self, author_id):
+    def __init__(self, author_id, data_path):
         self.author_id = author_id
         self.driver = None
         self.files_dir = None
         self.publications = []
+        self.data_path = Path(data_path)
 
         self.create_files_dir()
         self.setup_webdriver()
@@ -41,7 +40,7 @@ class AuthorParser:
         self.driver = webdriver.Firefox(profile, executable_path=self.DRIVER_PATH, options=options)
 
     def create_files_dir(self):
-        self.files_dir = self.DATA_PATH / "raw" / self.author_id
+        self.files_dir = self.data_path / "raw" / self.author_id
 
         print("Author's directory:", self.files_dir.absolute())
 
@@ -76,68 +75,54 @@ class AuthorParser:
 
             time.sleep(sleep_seconds)
 
-    def get_titles(self, soup):
-        title = soup.find_all('span', style="line-height:1.0;")
-        titles = []
-        for i in title:
-            titles.append(i.text)
+    def get_title(self, table_cell):
+        title = table_cell.find_all('span', style="line-height:1.0;")
 
-        return titles
+        if not title:
+            title = "-"
+        else:
+            title = title[0].text
 
-    def get_authors(self, info):
-        authors_to_save = []
+        return title
 
-        for i in range(len(info)):
-            if len(info[i]) > 5:  # Check if authors exist
-                authors = info[i].find_all('i')
-                for author in authors:
-                    authors_to_save.append(author.text)
-            else:
-                authors_to_save.append('-')
+    def get_authors(self, table_cell):
+        box_of_authors = table_cell.find_all('font', color="#00008f")
+        authors = box_of_authors[0].find_all('i')
+        if not authors:
+            authors = '-'
+        else:
+            authors = authors[0].text
 
-        return authors_to_save
+        return authors
 
-    def get_information(self, info):
-        info_save = []
-        for info_block in info:
-            publication_information = list(info_block.children)[-1]
+    def get_info(self, table_cell):
+        biblio_info = list(table_cell.children)[-1]
+        biblio_info = biblio_info.text.strip()
+        biblio_info = biblio_info.replace('\xa0', ' ')
+        biblio_info = biblio_info.replace('\r\n', ' ')
+        biblio_info = biblio_info.replace('\n', ' ')
 
-            if publication_information is None:
-                information_text = ""
-            else:
-                information_text = publication_information.text.strip()
-                information_text = information_text.replace('\xa0', ' ')  # Delete weird symbols
-                information_text = information_text.replace('\r\n', ' ')  # Delete rows splits
-                information_text = information_text.replace('\n', ' ')  # Delete rows splits
-            info_save.append(information_text)
+        return biblio_info
 
-        return info_save
+    def get_link(self, table_cell):
+        links_in_box = table_cell.find_all('a')
 
-    def get_links(self, info):
         links = []
-        for info_block in info:
-            all_links = []
-            link = info_block.find_all('a')
-            for j in link:  # TODO: check if it is always a list?
-                all_links.append(j.get('href'))
-            if all_links:
-                links.append('https://www.elibrary.ru/' + all_links[0])
-            else:
-                links.append("")
+        for link in links_in_box:
+            links.append(link.get('href'))
+        paper_link = 'https://www.elibrary.ru/' + links[0]  # TODO: check if it's always a paper link
 
-        return links
+        return paper_link
 
-    def save_publications(self, titles, authors, informations, links):
-        save_path = self.DATA_PATH / "processed" / self.author_id
+    def save_publications(self):
+        save_path = self.data_path / "processed" / self.author_id
         save_path.mkdir(exist_ok=True)
 
         csv_path = save_path / "publications.csv"
 
         with open(csv_path, 'a', encoding="utf8", newline='') as csvfile:
-            wr = csv.writer(csvfile, delimiter=';')
-            for i in range(len(titles)):
-                article = [titles[i], authors[i], informations[i], links[i]]
-                wr.writerow(article)
+            for publication in self.publications:
+                csvfile.write(publication.to_csv_row() + "\n")
 
     def parse_publications(self):
         print("Parsing publications for author", self.author_id)
@@ -155,19 +140,21 @@ class AuthorParser:
             for box in rubbish:
                 box.decompose()  # Remove all inner tags
 
-            info = publications_table.find_all('td', align="left", valign="top")
+            table_cells = publications_table.find_all('td', align="left", valign="top")
 
-            titles = self.get_titles(soup)
-            authors = self.get_authors(info)
-            informations = self.get_information(info)
-            links = self.get_links(info)
+            print("LENGTH OF INFO", len(table_cells))
 
-            for i in range(len(titles)):
+            for table_cell in table_cells:
+                title = self.get_title(table_cell)
+                authors = self.get_authors(table_cell)
+                info = self.get_info(table_cell)
+                link = self.get_link(table_cell)
+
                 self.publications.append(
                     Publication(
-                        title=titles[i],
-                        authors=authors[i],
-                        info=informations[i],
-                        link=links[i]
+                        title=title,
+                        authors=authors,
+                        info=info,
+                        link=link
                     )
                 )
