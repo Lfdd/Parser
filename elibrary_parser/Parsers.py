@@ -30,11 +30,6 @@ class AuthorParser:
     def create_files_dir(self):
         """Creates directory for the web-pages of an specific author
 
-        Parameters
-        ----------
-        files_dir.mkdir : Path
-            Creates a directory with "author_id" name.
-
         """
 
         self.files_dir = self.DATA_PATH / self.author_id
@@ -50,14 +45,6 @@ class AuthorParser:
         Sleeps for a few seconds in order to load properly
         While there is no specific error "NoSuchElementException"
         Which means that no page was loaded. If so stops
-
-        Parameters
-        ----------
-        driver.get : str
-            Creates a request to the page.
-
-        driver.page_source : str
-             HTML code of a page.
 
         Raises
         ------
