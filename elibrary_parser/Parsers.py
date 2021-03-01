@@ -137,8 +137,10 @@ class AuthorParser:
         csv_path = save_path / "publications.csv"
 
         with open(csv_path, 'a', encoding="utf8", newline='') as csvfile:
-            for publication in self.publications:
-                csvfile.write(publication.to_csv_row() + "\n")
+            wr = csv.writer(csvfile, delimiter=';')
+            publication = [title, authors, biblio_info, paper_link]
+            wr.writerow(publication)
+            
 
     def parse_publications(self):
         print("Parsing publications for author", self.author_id)
