@@ -138,8 +138,14 @@ class AuthorParser:
 
         with open(csv_path, 'a', encoding="utf8", newline='') as csvfile:
             wr = csv.writer(csvfile, delimiter=';')
-            publication = [title, authors, biblio_info, paper_link]
-            wr.writerow(publication)
+            for publication in self.publications:
+                saving_publication =[
+                    publication.title,
+                    publication.authors,
+                    publication.info,
+                    publication.link
+                ]
+                wr.writerow(saving_publication)
             
 
     def parse_publications(self):
