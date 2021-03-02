@@ -185,18 +185,14 @@ class AuthorParser:
             print("LENGTH OF INFO", len(table_cells))
 
             for table_cell in table_cells:
-                title = self.get_title(table_cell)
-                authors = self.get_authors(table_cell)
                 info = self.get_info(table_cell)
-                link = self.get_link(table_cell)
-                year = self.get_year(info)
 
                 self.publications.append(
                     Publication(
-                        title=title,
-                        authors=authors,
+                        title=self.get_title(table_cell),
+                        authors=self.get_authors(table_cell),
                         info=info,
-                        link=link,
-                        year=year
+                        link=self.get_link(table_cell),
+                        year=self.get_year(info)
                     )
                 )
