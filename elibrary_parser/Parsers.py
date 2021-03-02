@@ -155,7 +155,7 @@ class AuthorParser:
         with open(csv_path, 'a', encoding="utf8", newline='') as csvfile:
             wr = csv.writer(csvfile, delimiter=';')
             for publication in self.publications:
-                saving_publication =[
+                saving_publication = [
                     publication.title,
                     publication.authors,
                     publication.info,
