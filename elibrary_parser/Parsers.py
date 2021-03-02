@@ -133,8 +133,7 @@ class AuthorParser:
 
         if years:
             year = years[0]
-        
-        return year
+            return year
 
     @staticmethod
     def get_link(table_cell):
