@@ -95,7 +95,8 @@ class AuthorParser:
 
             time.sleep(sleep_seconds)
 
-    def get_title(self, table_cell):
+    @staticmethod
+    def get_title(table_cell):
         title = table_cell.find_all('span', style="line-height:1.0;")
 
         if not title:
@@ -105,7 +106,8 @@ class AuthorParser:
 
         return title
 
-    def get_authors(self, table_cell):
+    @staticmethod
+    def get_authors(table_cell):
         box_of_authors = table_cell.find_all('font', color="#00008f")
         authors = box_of_authors[0].find_all('i')
         if not authors:
@@ -115,7 +117,8 @@ class AuthorParser:
 
         return authors
 
-    def get_info(self, table_cell):
+    @staticmethod
+    def get_info(table_cell):
         biblio_info = list(table_cell.children)[-1]
         biblio_info = biblio_info.text.strip()
         biblio_info = biblio_info.replace('\xa0', ' ')
@@ -123,8 +126,9 @@ class AuthorParser:
         biblio_info = biblio_info.replace('\n', ' ')
 
         return biblio_info
-    
-    def get_year(self, biblio_info):
+
+    @staticmethod
+    def get_year(biblio_info):
         years = re.findall(r'20\d{2}|19\d{2}', biblio_info)
 
         if years:
@@ -132,7 +136,8 @@ class AuthorParser:
         
         return year
 
-    def get_link(self, table_cell):
+    @staticmethod
+    def get_link(table_cell):
         links_in_box = table_cell.find_all('a')
 
         links = []
@@ -159,7 +164,6 @@ class AuthorParser:
                     publication.year
                 ]
                 wr.writerow(saving_publication)
-            
 
     def parse_publications(self):
         print("Parsing publications for author", self.author_id)
