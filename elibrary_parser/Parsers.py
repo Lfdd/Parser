@@ -152,7 +152,7 @@ class AuthorParser:
                     publication.title,
                     publication.authors,
                     publication.info,
-                    publication.link
+                    publication.link,
                     publication.year
                 ]
                 wr.writerow(saving_publication)
