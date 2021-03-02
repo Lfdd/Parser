@@ -13,7 +13,12 @@ DATE2 = "2019"
 publications = []
 
 for author_id in author_ids:
-    parser = AuthorParser(author_id=author_id, data_path="C:/Users/vladi/PycharmProjects/Parser/data/")
+    parser = AuthorParser(
+        author_id=author_id,
+        data_path="C:/Users/vladi/PycharmProjects/Parser/data/",
+        date_from=2016,
+        date_to=2020
+    )
     parser.find_publications()
     parser.parse_publications()
     parser.save_publications()
