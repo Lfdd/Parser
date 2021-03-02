@@ -13,7 +13,7 @@ class Publication:
         return self.title + ';' + self.authors + ';' + self.info + ';' + self.link + ';' + self.year
 
     def get_year(self):
-        years = re.findall(r'20\d{​​2}​​|19\d{​​2}​​', self.info)
+        years = re.findall(r'20\d{2}|19\d{2}​​', self.info)
         if years:
             self.year = years[0]
         else:
