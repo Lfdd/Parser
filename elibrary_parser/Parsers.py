@@ -49,12 +49,7 @@ class AuthorParser:
         self.files_dir.mkdir(exist_ok=True)
 
     def find_publications(self):
-        """Gets the web-page
-        Cycle 'while' creates "page.html" in "files_dir"
-        Trying to get the next page by using "find_element_by_xpath"
-        Sleeps for a few seconds in order to load properly
-        While there is no specific error "NoSuchElementException"
-        Which means that no page was loaded. If so stops
+        """Gets the web-page 
 
         Raises
         ------
