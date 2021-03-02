@@ -47,7 +47,7 @@ class AuthorParser:
         self.files_dir.mkdir(exist_ok=True)
 
     def find_publications(self):
-        """Gets the web-page"""
+        """Gets the web-page with choosen years"""
 
         author_page_url = f'https://www.elibrary.ru/author_items.asp?authorid={self.author_id}'
         print("Author page URL:", author_page_url)
@@ -55,6 +55,19 @@ class AuthorParser:
         print("Getting author's page")
         self.driver.get(author_page_url)
         print("Done")
+        
+        date_diff = int(self.date1) - int(self.date2)
+        self.driver.find_element_by_xpath('//*[@id="hdr_years"]').click()
+        time.sleep(5)
+        while date_diff >= 0:
+            date_raw = int(self.date1) - int(date_diff)
+            year = '//*[@id="year_' + str(date_raw) + '"]'
+            element = self.driver.find_element_by_xpath(year)
+            self.driver.execute_script("arguments[0].click();", element)
+            date_diff -= 1
+            print('Годы:', date_raw)
+
+        self.driver.find_element_by_xpath('//td[6]/div').click()
 
         is_page_real = True
         page_number = 1
