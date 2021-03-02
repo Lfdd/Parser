@@ -120,6 +120,14 @@ class AuthorParser:
         biblio_info = biblio_info.replace('\n', ' ')
 
         return biblio_info
+    
+    def get_year(self, biblio_info):
+        years = re.findall(r'20\d{2}|19\d{2}', biblio_info)
+
+        if years:
+            year = years[0]
+        
+        return year
 
     def get_link(self, table_cell):
         links_in_box = table_cell.find_all('a')
@@ -145,6 +153,7 @@ class AuthorParser:
                     publication.authors,
                     publication.info,
                     publication.link
+                    publication.year
                 ]
                 wr.writerow(saving_publication)
             
@@ -174,6 +183,7 @@ class AuthorParser:
                 authors = self.get_authors(table_cell)
                 info = self.get_info(table_cell)
                 link = self.get_link(table_cell)
+                year = self.get_year(info)
 
                 self.publications.append(
                     Publication(
@@ -181,5 +191,6 @@ class AuthorParser:
                         authors=authors,
                         info=info,
                         link=link
+                        year=year
                     )
                 )
