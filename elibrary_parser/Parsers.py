@@ -51,7 +51,7 @@ class AuthorParser:
         self.files_dir.mkdir(exist_ok=True)
 
     def find_publications(self):
-        """Gets the web-page with choosen years"""
+        """Gets the web-page with chosen years"""
 
         author_page_url = f'https://www.elibrary.ru/author_items.asp?authorid={self.author_id}'
         print("Author page URL:", author_page_url)
