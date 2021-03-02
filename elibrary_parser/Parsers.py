@@ -190,7 +190,7 @@ class AuthorParser:
                         title=title,
                         authors=authors,
                         info=info,
-                        link=link
+                        link=link,
                         year=year
                     )
                 )
