@@ -1,7 +1,6 @@
 import csv
 from pathlib import Path
 import random
-import re
 import time
 
 from bs4 import BeautifulSoup
