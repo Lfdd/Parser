@@ -20,14 +20,14 @@ class AuthorParser:
     )
     DRIVER_PATH = "D:\\Software\\geckodriver.exe"  # TODO: generalize it
 
-    def __init__(self, author_id, data_path, date1, date2):
+    def __init__(self, author_id, data_path, date_to, date_from):
         self.author_id = author_id
         self.driver = None
         self.files_dir = None
         self.publications = []
         self.data_path = Path(data_path)
-        self.date1 = date1
-        self.date2 = date2
+        self.date_to = date_to
+        self.date_from = date_from
 
         self.create_files_dir()
         self.setup_webdriver()
@@ -60,11 +60,11 @@ class AuthorParser:
         self.driver.get(author_page_url)
         print("Done")
         
-        date_diff = int(self.date1) - int(self.date2)
+        date_diff = int(self.date_to) - int(self.date_from)
         self.driver.find_element_by_xpath('//*[@id="hdr_years"]').click()
         time.sleep(5)
         while date_diff >= 0:
-            date_raw = int(self.date1) - int(date_diff)
+            date_raw = int(self.date_to) - int(date_diff)
             year = '//*[@id="year_' + str(date_raw) + '"]'
             element = self.driver.find_element_by_xpath(year)
             self.driver.execute_script("arguments[0].click();", element)
