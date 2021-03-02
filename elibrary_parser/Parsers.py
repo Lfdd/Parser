@@ -64,8 +64,8 @@ class AuthorParser:
                 f.write(self.driver.page_source)
 
             print("Downloading page number", page_number)
-            page_number = page_number + 1
-
+            page_number += 1
+            
             try:
                 self.driver.find_element_by_link_text('Следующая страница').click()
             except NoSuchElementException:
