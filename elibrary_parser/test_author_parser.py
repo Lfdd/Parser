@@ -12,3 +12,9 @@ def test_get_title_with_good_data():
 </font></td>""", "html.parser")
 
     assert AuthorParser.get_title(table_cell) == "ИССЛЕДОВАНИЕ ЧИСЛА КОПИЙ МТДНК НА КЛЕТКУ ПРИ АТЕРОСКЛЕРОЗЕ"
+
+
+def test_get_title_with_empty_string():
+    table_cell = BeautifulSoup("", "html.parser")
+
+    assert AuthorParser.get_title(table_cell) == "-"
