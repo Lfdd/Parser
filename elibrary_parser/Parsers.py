@@ -66,7 +66,7 @@ class AuthorParser:
         while date_diff >= 0:
             date_raw = int(self.date_to) - int(date_diff)
             year = '//*[@id="year_' + str(date_raw) + '"]'
-            element = self.driver.find_element_by_xpath(year)
+            element = self.driver.find_element_by_xpath(year)  # TODO: catch error if element does not exist
             self.driver.execute_script("arguments[0].click();", element)
             date_diff -= 1
             print('Годы:', date_raw)
