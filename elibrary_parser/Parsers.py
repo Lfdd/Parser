@@ -18,12 +18,14 @@ class AuthorParser:
     )
     DRIVER_PATH = "D:\\Software\\geckodriver.exe"  # TODO: generalize it
 
-    def __init__(self, author_id, data_path):
+    def __init__(self, author_id, data_path, date1, date2):
         self.author_id = author_id
         self.driver = None
         self.files_dir = None
         self.publications = []
         self.data_path = Path(data_path)
+        self.date1 = date1
+        self.date2 = date2
 
         self.create_files_dir()
         self.setup_webdriver()
