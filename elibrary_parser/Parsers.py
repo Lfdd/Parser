@@ -71,7 +71,8 @@ class AuthorParser:
             date_diff -= 1
             print('Годы:', date_raw)
 
-        self.driver.find_element_by_xpath('//td[6]/div').click()
+        # Click "search by year" button
+        self.driver.find_element_by_xpath('//td[6]/div').click()  # TODO: remove hardcoded index
 
         is_page_real = True
         page_number = 1
