@@ -7,6 +7,9 @@ author_ids = [
     "638022"  # Слепцов
 ]
 
+DATE1 = "2020"
+DATE2 = "2019"
+
 publications = []
 
 for author_id in author_ids:
