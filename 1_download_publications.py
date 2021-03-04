@@ -15,7 +15,7 @@ publications = []
 for author_id in author_ids:
     parser = AuthorParser(
         author_id=author_id,
-        data_path="C:/Users/vladi/PycharmProjects/Parser/data/",
+        data_path="C:/Users/Иван Заваруев/PycharmProjects/Parser/data/",
         date_from=2016,
         date_to=2020
     )
