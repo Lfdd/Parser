@@ -127,11 +127,14 @@ class AuthorParser:
 
     @staticmethod
     def get_info(table_cell):
-        biblio_info = list(table_cell.children)[-1]
-        biblio_info = biblio_info.text.strip()
-        biblio_info = biblio_info.replace('\xa0', ' ')
-        biblio_info = biblio_info.replace('\r\n', ' ')
-        biblio_info = biblio_info.replace('\n', ' ')
+        if len(table_cell) == 0:
+            biblio_info = '-'
+        else:
+            biblio_info = list(table_cell.children)[-1]
+            biblio_info = biblio_info.text.strip()
+            biblio_info = biblio_info.replace('\xa0', ' ')
+            biblio_info = biblio_info.replace('\r\n', ' ')
+            biblio_info = biblio_info.replace('\n', ' ')
 
         return biblio_info
 
