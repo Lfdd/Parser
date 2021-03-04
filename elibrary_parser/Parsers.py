@@ -17,7 +17,7 @@ class AuthorParser:
         'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Iron/28.0.1550.1 Chrome/28.0.1550.1',
         'Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.16',
     )
-    DRIVER_PATH = "D:\\Software\\geckodriver.exe"  # TODO: generalize it
+    DRIVER_PATH = "C:/Users/Иван Заваруев/Documents/Drivers/geckodriver.exe"  # TODO: generalize it
 
     def __init__(self, author_id, data_path, date_to, date_from):
         self.author_id = author_id
@@ -43,6 +43,12 @@ class AuthorParser:
 
     def create_files_dir(self):
         """Creates directory for the web-pages of an specific author"""
+        raw_data_dir = self.data_path / "raw"
+        raw_data_dir.mkdir(exist_ok=True)
+
+        processed_data_dir = self.data_path / "processed"
+        processed_data_dir.mkdir(exist_ok=True)
+
         self.files_dir = self.data_path / "raw" / self.author_id
 
         print("Author's directory:", self.files_dir.absolute())
@@ -108,11 +114,14 @@ class AuthorParser:
     @staticmethod
     def get_authors(table_cell):
         box_of_authors = table_cell.find_all('font', color="#00008f")
-        authors = box_of_authors[0].find_all('i')
-        if not authors:
+        if not box_of_authors:
             authors = '-'
         else:
-            authors = authors[0].text
+            authors = box_of_authors[0].find_all('i')
+            if not authors:
+                authors = '-'
+            else:
+                authors = authors[0].text
 
         return authors
 
