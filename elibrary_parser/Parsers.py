@@ -140,12 +140,12 @@ class AuthorParser:
 
     @staticmethod
     def get_link(table_cell):
-        links_in_box = table_cell.find_all('a')
-        if not links_in_box:
+        information_wint_links_in_box = table_cell.find_all('a')
+        if not information_wint_links_in_box:
             paper_link = '-'
         else:
             links = []
-            for link in links_in_box:
+            for link in information_wint_links_in_box:
                 links.append(link.get('href'))
             paper_link = 'https://www.elibrary.ru/' + links[0]  # TODO: check if it's always a paper link
 
