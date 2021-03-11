@@ -1,6 +1,6 @@
 # Парсер научных журналов eLibrary
 
-Что это?
+Краткое описание
 -------------
 
 Данная программа собирает список публикаций автора по его идентификатору 
@@ -42,7 +42,7 @@ selenium и BeautifulSoup4
 pip install selenium
 pip install beautifulsoup4
 ```
-И последнее: чтобы selenium мог имитировать работу браузера необходимо
+Чтобы selenium мог имитировать работу браузера необходимо
 установить [gekodriver.exe](https://github.com/mozilla/geckodriver/releases), 
-затем указать в //elibrary_parser/config.py путь до gekodriver.exe на вашем 
+затем указать в /elibrary_parser/config.py путь до gekodriver.exe на вашем 
 компьютере.
