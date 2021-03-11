@@ -150,6 +150,17 @@ class AuthorParser:
 
         return paper_link
 
+    def create_table_cells(self, soup):
+        publications_table = soup.find_all('table', id="restab")[0]
+
+        rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
+        for box in rubbish:
+            box.decompose()  # Remove all inner tags
+
+        table_cells = publications_table.find_all('td', align="left", valign="top")
+
+        return table_cells
+
     def save_publications(self):
         save_path = self.data_path / "processed" / self.author_id
         save_path.mkdir(exist_ok=True)
@@ -178,13 +189,8 @@ class AuthorParser:
                 page_text = f.read()
 
             soup = BeautifulSoup(page_text, "html.parser")
-            publications_table = soup.find_all('table', id="restab")[0]
 
-            rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
-            for box in rubbish:
-                box.decompose()  # Remove all inner tags
-
-            table_cells = publications_table.find_all('td', align="left", valign="top")
+            table_cells = self.create_table_cells(soup)
 
             print("LENGTH OF INFO", len(table_cells))
 
