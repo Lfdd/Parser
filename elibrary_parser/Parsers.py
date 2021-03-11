@@ -150,7 +150,8 @@ class AuthorParser:
 
         return paper_link
 
-    def create_table_cells(self, soup):
+    @staticmethod
+    def create_table_cells(soup):
         publications_table = soup.find_all('table', id="restab")[0]
 
         rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
