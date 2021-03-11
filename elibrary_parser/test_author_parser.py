@@ -7,16 +7,10 @@ from elibrary_parser.types import Publication
 
 @pytest.fixture
 def publication_table_cell():
-    data_test = open('C:/Users/Иван Заваруев/PycharmProjects/Parser/data test/page_3.html',
+    data_test = open('../data test/page_3.html',
                      'r', encoding= 'utf8')
     soup = BeautifulSoup(data_test, "html.parser")
-    publications_table = soup.find_all('table', id="restab")[0]
-
-    rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
-    for box in rubbish:
-        box.decompose()  # Remove all inner tags
-
-    table_cells = publications_table.find_all('td', align="left", valign="top")
+    table_cells = AuthorParser.create_table_cells(soup)
 
     publication_table_cell = table_cells[8]
 
