@@ -101,11 +101,17 @@ class AuthorParser:
             time.sleep(sleep_seconds)
 
     @staticmethod
+    def missing_value():
+        value = '-'
+
+        return value
+
+    @staticmethod
     def get_title(table_cell):
         title = table_cell.find_all('span', style="line-height:1.0;")
 
         if not title:
-            title = "-"
+            title = AuthorParser.missing_value()
         else:
             title = title[0].text
 
@@ -115,7 +121,7 @@ class AuthorParser:
     def get_authors(table_cell):
         box_of_authors = table_cell.find_all('font', color="#00008f")
         if not box_of_authors:
-            authors = '-'
+            authors = AuthorParser.missing_value()
         else:
             authors = box_of_authors[0].find_all('i')
             if not authors:
@@ -128,7 +134,7 @@ class AuthorParser:
     @staticmethod
     def get_info(table_cell):
         if len(table_cell) == 0:
-            biblio_info = '-'
+            biblio_info = AuthorParser.missing_value()
         else:
             biblio_info = list(table_cell.children)[-1]
             biblio_info = biblio_info.text.strip()
@@ -142,7 +148,7 @@ class AuthorParser:
     def get_link(table_cell):
         information_wint_links_in_box = table_cell.find_all('a')
         if not information_wint_links_in_box:
-            paper_link = '-'
+            paper_link = AuthorParser.missing_value()
         else:
             title_information_with_link = information_wint_links_in_box[0]
             link = title_information_with_link.get('href')
