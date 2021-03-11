@@ -144,10 +144,9 @@ class AuthorParser:
         if not information_wint_links_in_box:
             paper_link = '-'
         else:
-            links = []
-            for link in information_wint_links_in_box:
-                links.append(link.get('href'))
-            paper_link = 'https://www.elibrary.ru/' + links[0]  # TODO: check if it's always a paper link
+            title_information_with_link = information_wint_links_in_box[0]
+            link = title_information_with_link.get('href')
+            paper_link = 'https://www.elibrary.ru/' + link  # TODO: check if it's always a paper link
 
         return paper_link
 
