@@ -7,7 +7,7 @@ from elibrary_parser.types import Publication
 
 @pytest.fixture
 def publication_table_cell():
-    data_test = open('C:/Users/Иван Заваруев/PycharmProjects/Parser/data/raw/679517/page_3.html',
+    data_test = open('C:/Users/Иван Заваруев/PycharmProjects/Parser/data test/page_3.html',
                      'r', encoding= 'utf8')
     soup = BeautifulSoup(data_test, "html.parser")
     publications_table = soup.find_all('table', id="restab")[0]
@@ -18,7 +18,7 @@ def publication_table_cell():
 
     table_cells = publications_table.find_all('td', align="left", valign="top")
 
-    publication_table_cell = table_cells[3]
+    publication_table_cell = table_cells[8]
 
     #<td align="left" valign="top">
     #<a href="/item.asp?id=36558133"><b><span style="line-height:1.0;">
