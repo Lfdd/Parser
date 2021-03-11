@@ -1,0 +1,1745 @@
+<html><head>
+<meta name="robots" content="noindex,nofollow">
+<title>eLIBRARY.RU - Марков Антон Владимирович - Список публикаций</title>
+
+<script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js"></script><script type="text/javascript" src="/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="/fancybox/jquery.easydrag.js"></script>
+<script type="text/javascript" src="/elibrary1.js"></script>
+<script type="text/javascript" src="/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen">
+<link rel="stylesheet" href="/style_sm.css" type="text/css" media="screen">
+
+<script language="JavaScript">
+
+but_blue_hover=new Image();
+but_blue_hover.src="/images/but_blue_hover.png";
+but_red_hover=new Image();
+but_red_hover.src="/images/but_red_hover.png";
+but_gray_hover=new Image();
+but_gray_hover.src="/images/but_gray_hover.png";
+
+w_down=new Image();
+w_down.src="/pic/w_show.gif";
+w_up=new Image();
+w_up.src="/pic/w_hide.gif";
+ws_down=new Image();
+ws_down.src="/images/or_er2_down.gif";
+ws_up=new Image();
+ws_up.src="/images/or_close2.gif";
+
+var selRow;
+var row_color;
+function onRowClick(row){
+  if(row != selRow){
+     if (selRow != null){
+        selRow.bgColor = row_color;
+     }
+  selRow = row;
+  row_color = row.bgColor;
+  selRow.bgColor="#e8e8e8";
+  }
+}
+function hideShow(elem,parent) {
+  var child =  document.getElementById(elem);
+  child.className = child.className == "collapsed" ? "expanded" : "collapsed";
+  if (parent.className == "win_expandable") parent.src = child.className == "collapsed" ? w_down.src : w_up.src;
+}
+function hideShowSel(elem) {
+  var child =  document.getElementById(elem);
+  child.className = child.className == "collapsed" ? "expanded" : "collapsed";
+  var imgparent =  document.getElementById('img_'+elem);
+  if (imgparent.className == "win_expandable") imgparent.src = child.className == "collapsed" ? ws_down.src : ws_up.src;
+  var txtparent =  document.getElementById('txt_'+elem);
+  if (txtparent.className == "win_expandable") txtparent.innerHTML = child.className == "collapsed" ? "Раскрыть" : "Скрыть";
+}
+function hideShowSel1(elem) {
+  var child =  document.getElementById(elem);
+  $('#'+elem).slideToggle(500, function(){didScroll = true;})
+  child.className = child.className == "collapsed1" ? "expanded1" : "collapsed1";
+  if (child.className == "collapsed1") {
+    $('#'+elem).slideUp(500, function(){didScroll = true;})}
+  else {
+    $('#'+elem).slideDown(500, function(){didScroll = true;})}
+  var txtparent =  document.getElementById('txt_'+elem);
+  if (txtparent.className == "win_expandable") txtparent.innerHTML = child.className == "collapsed1" ? "▼" : "▲";
+}
+function RowSelect(row,sel){
+  var rbgc = sel==1 ? "#e8e8e8" : "#f5f5f5";
+  $('#'+row+' td').attr('bgColor', rbgc);
+}
+function select_all(){
+  $('input:checkbox[name^="tid"]').attr('checked', true);
+  $('input:checkbox[name^="pid"]').attr('checked', true);
+  $('tr[id^="arw"] td').attr('bgColor', "#e8e8e8");
+  $('tr[id^="brw"] td').attr('bgColor', "#e8e8e8");
+}
+function deselect_all(){
+  $('input:checkbox[name^="tid"]').attr('checked', false);
+  $('input:checkbox[name^="pid"]').attr('checked', false);
+  $('tr[id^="arw"] td').attr('bgColor', "#f5f5f5");
+  $('tr[id^="brw"] td').attr('bgColor', "#f5f5f5");
+}
+function select_options(sname){
+  $('input:checkbox[name^="'+sname+'s_"]').attr('checked', true);
+  $('tr[name^="'+sname+'_"]').attr('bgColor', "#dddddd");
+  checked_count(sname);
+  isnew=1;
+  }
+function deselect_options(sname){
+  $('input:checkbox[name^="'+sname+'s_"]').attr('checked', false);
+  $('tr[name^="'+sname+'_"]').attr('bgColor', "#f5f5f5");
+  checked_count(sname);
+  isnew=1;
+}
+function wait_load_options(sname){
+  $('span[name="'+sname+'sheader"]').text('загружается...');
+}
+function checked_count(sname){
+  var nb=$('input:checkbox[name^="'+sname+'s_"]:checked').length;
+  if (nb>0){$('span[name="'+sname+'sheader"]').html('(выделено: ' + nb + ')')}
+  else{$('span[name="'+sname+'sheader"]').text('')}
+}
+var ir=0;
+function resizelist(sname, offset) {
+ if (ir <= offset+10) {
+  ir=ir+1;
+  $('div[id="'+sname+'_options"]').height(ir+50);
+  window.setTimeout('resizelist("'+sname+'", '+offset+')', 1);
+ }
+}
+var rubricloaded=0;
+var titleloaded=0;
+var orgloaded=0;
+var authorloaded=0;
+var yearloaded=0;
+var typeloaded=0;
+var roleloaded=0;
+var keywordloaded=0;
+var isnew=0;
+
+$(document).ready(function() { 
+	didScroll=true;
+
+
+
+$('#rubric_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="rubrics_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(8) + "|"});
+$('#rubrics_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#rubrics_options').load("author_items_rubrics.asp?id=679517&order=" + $('#rubric_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+rubricloaded=1;
+})
+$('*[id$="_rubrics"]').click(function() { 
+hideShowSel1('rubrics');
+if (rubricloaded==0){
+$('#rubrics_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_rubrics.asp?id=679517&order=" + $('#rubric_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#rubrics_options').html(data);
+  if ($('#rubrics_table').height()<=200){$('#rubrics_options').height($('#rubrics_table').height()+10)}
+  else {$('#rubrics_options').height(200)};
+  rubricloaded=1;
+  })
+}
+else {
+  if ($('#rubrics_table').height()<=200){$('#rubrics_options').height($('#rubrics_table').height()+10)}
+  else {$('#rubrics_options').height(200)};
+}
+})
+
+
+$('#title_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="titles_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(7) + "|"});
+$('#titles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#titles_options').load("author_items_titles.asp?id=679517&order=" + $('#title_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+titleloaded=1;
+})
+$('*[id$="_titles"]').click(function() { 
+hideShowSel1('titles');
+if (titleloaded==0){
+$('#titles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_titles.asp?id=679517&order=" + $('#title_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#titles_options').html(data);
+  if ($('#titles_table').height()<=200){$('#titles_options').height($('#titles_table').height()+10)}
+  else {$('#titles_options').height(200)};
+  titleloaded=1;
+  })
+}
+else {
+  if ($('#titles_table').height()<=200){$('#titles_options').height($('#titles_table').height()+10)}
+  else {$('#titles_options').height(200)};
+}
+})
+
+
+$('#org_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="orgs_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(5) + "|"});
+$('#orgs_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#orgs_options').load("author_items_orgs.asp?id=679517&order=" + $('#org_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+orgloaded=1;
+})
+$('*[id$="_orgs"]').click(function() { 
+hideShowSel1('orgs');
+if (orgloaded==0){
+$('#orgs_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_orgs.asp?id=679517&order=" + $('#org_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#orgs_options').html(data);
+  if ($('#orgs_table').height()<=200){$('#orgs_options').height($('#orgs_table').height()+10)}
+  else {$('#orgs_options').height(200)};
+  orgloaded=1;
+  })
+}
+else {
+  if ($('#orgs_table').height()<=200){$('#orgs_options').height($('#orgs_table').height()+10)}
+  else {$('#orgs_options').height(200)};
+}
+})
+
+
+$('#author_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="authors_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(8) + "|"});
+selids = encodeURIComponent(selids);
+$('#authors_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#authors_options').load("author_items_authors.asp?id=679517&order=" + $('#author_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+authorloaded=1;
+})
+$('*[id$="_authors"]').click(function() { 
+hideShowSel1('authors');
+if (authorloaded==0){
+$('#authors_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_authors.asp?id=679517&order=" + $('#author_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#authors_options').html(data);
+  if ($('#authors_table').height()<=200){$('#authors_options').height($('#authors_table').height()+10)}
+  else {$('#authors_options').height(200)};
+  authorloaded=1;
+  })
+}
+else {
+  if ($('#authors_table').height()<=200){$('#authors_options').height($('#authors_table').height()+10)}
+  else {$('#authors_options').height(200)};
+}
+})
+
+
+$('#year_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="years_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#years_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#years_options').load("author_items_years.asp?id=679517&order=" + $('#year_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+yearloaded=1;
+})
+$('*[id$="_years"]').click(function() { 
+hideShowSel1('years');
+if (yearloaded==0){
+$('#years_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_years.asp?id=679517&order=" + $('#year_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#years_options').html(data);
+  if ($('#years_table').height()<=200){$('#years_options').height($('#years_table').height()+10)}
+  else {$('#years_options').height(200)};
+  yearloaded=1;
+  })
+}
+else {
+  if ($('#years_table').height()<=200){$('#years_options').height($('#years_table').height()+10)}
+  else {$('#years_options').height(200)};
+}
+})
+
+
+$('#type_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="types_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#types_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#types_options').load("author_items_types.asp?id=679517&order=" + $('#type_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+typeloaded=1;
+})
+$('*[id$="_types"]').click(function() { 
+hideShowSel1('types');
+if (typeloaded==0){
+$('#types_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_types.asp?id=679517&order=" + $('#type_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#types_options').html(data);
+  if ($('#types_table').height()<=200){$('#types_options').height($('#types_table').height()+10)}
+  else {$('#types_options').height(200)};
+  typeloaded=1;
+  })
+}
+else {
+  if ($('#types_table').height()<=200){$('#types_options').height($('#types_table').height()+10)}
+  else {$('#types_options').height(200)};
+}
+})
+
+
+$('#role_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="roles_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#roles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#roles_options').load("author_items_roles.asp?id=679517&order=" + $('#role_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+roleloaded=1;
+})
+$('*[id$="_roles"]').click(function() { 
+hideShowSel1('roles');
+if (roleloaded==0){
+$('#roles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_roles.asp?id=679517&order=" + $('#role_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#roles_options').html(data);
+  if ($('#roles_table').height()<=200){$('#roles_options').height($('#roles_table').height()+10)}
+  else {$('#roles_options').height(200)};
+  roleloaded=1;
+  })
+}
+else {
+  if ($('#roles_table').height()<=200){$('#roles_options').height($('#roles_table').height()+10)}
+  else {$('#roles_options').height(200)};
+}
+})
+
+
+
+$('#keyword_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="keywords_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(9) + "|"});
+$('#keywords_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#keywords_options').load("author_items_keywords.asp?id=679517&order=" + $('#keyword_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random());
+keywordloaded=1;
+})
+$('*[id$="_keywords"]').click(function() { 
+hideShowSel1('keywords');
+if (keywordloaded==0){
+$('#keywords_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_keywords.asp?id=679517&order=" + $('#keyword_order').val() + "&selids=" + "&show_hash=0&show_refs=1&show_option=0&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#keywords_options').html(data);
+  if ($('#keywords_table').height()<=200){$('#keywords_options').height($('#keywords_table').height()+10)}
+  else {$('#keywords_options').height(200)};
+  keywordloaded=1;
+  })
+}
+else {
+  if ($('#keywords_table').height()<=200){$('#keywords_options').height($('#keywords_table').height()+10)}
+  else {$('#keywords_options').height(200)};
+}
+})
+
+
+})
+
+function reset_form(){
+  var frm = document.forms["results"];
+  deselect_options("rubric"); 
+  deselect_options("title"); 
+  deselect_options("org"); 
+  deselect_options("author"); 
+  deselect_options("year"); 
+  deselect_options("type"); 
+  deselect_options("role"); 
+  deselect_options("keyword"); 
+}
+function pub_search(){
+  var frm = document.forms["results"];
+    frm.pagenum.value=1;
+    frm.action="author_items.asp";
+    frm.target="";
+    frm.submit()
+}
+
+function itembox_add(){
+  var frm = document.forms["results"];
+  var issel=0;
+  frm.items_all.value="";
+  for (var i = 0; i < frm.elements.length; i++) {
+    if (frm.elements[i].name.substring(0,3)=="tid"){
+       if (frm.elements[i].checked) {
+	     issel=issel+1;
+	     frm.items_all.value = frm.items_all.value + frm.elements[i].name.substring(3, frm.elements[i].name.length) + "|";
+	   }
+    }
+ }
+ if (issel==0) {
+    alerts ("Не выделено ни одной публикации")}
+ else {
+    $.fancybox({
+      href : 'itembox_item_add2.asp?itemboxid='+frm.itemboxid.value+'&items_all='+frm.items_all.value ,
+      title : '',
+	  padding : 20,     
+	  width : 480,
+	  height : 150,
+	  overlayOpacity : 0.3,	
+	  overlayColor : '#000',
+	  speedIn : 500,
+	  hideOnOverlayClick : false,
+	  enableEscapeButton : true,
+	  type : 'iframe'
+    });
+  }
+}
+
+function itembox_new(aid,anam){
+  var frm = document.forms["results"];
+  var el = document.createElement("OPTION");
+  el.text=anam;
+  el.value=aid;
+  frm.itemboxid.options[frm.itemboxid.options.length]=el;
+  frm.itemboxid[frm.itemboxid.length-1].selected=true;
+}
+function itembox_add_all(){
+  var frm = document.forms["results"];
+    $.fancybox({
+      href : 'itembox_item_add2.asp?itemboxid='+frm.itemboxid.value+'&add_all=2' ,
+      title : '',
+	  padding : 20,     
+	  width : 480,
+	  height : 150,
+	  overlayOpacity : 0.3,	
+	  overlayColor : '#000',
+	  speedIn : 500,
+	  hideOnOverlayClick : false,
+	  enableEscapeButton : true,
+	  type : 'iframe'
+    });
+}
+function newquery(){
+  document.forms["results"].action="querybox.asp";
+  document.forms["results"].target="";
+  document.forms["results"].submit()
+}
+function show_help(topic){
+  anewwin=window.open("", "addwin", "resizable=yes,scrollbars=yes,height=300,width=500,top=0,left=0");
+  document.forms["results"].action=topic;
+  document.forms["results"].target="addwin";
+  document.forms["results"].submit()
+}
+function load_article(id){
+
+  alerts("Для доступа к полному тексту необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.getElementById("img_login").src = w_up.src;
+  document.forms["login"].login.focus();
+
+}
+function html_article(id){
+
+  alerts("Для доступа к полному тексту необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.getElementById("img_login").src = w_up.src;
+  document.forms["login"].login.focus();
+
+}
+function order_item(id, pr){
+
+  alerts("Для заказа полного текста публикации необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.getElementById("img_login").src = w_up.src;
+  document.forms["login"].login.focus();
+
+}
+function goto_page(pnum){
+  var frm = document.forms["results"];
+  frm.pagenum.value=pnum;
+  frm.action="author_items.asp";
+  frm.target="";
+  frm.submit()
+}
+
+function author_items_print(){
+  var frm = document.forms["results"];
+  anewwin=window.open("", "author_items_print679517", "resizable=yes,scrollbars=yes,menubar=yes,height=600,width=700,top=50,left=50");
+  frm.action="author_items_print.asp";
+  frm.target="author_items_print679517";
+  frm.submit()
+}
+
+
+
+function show_author_refs(iid){
+
+  alerts("Для доступа к этой странице необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.forms["login"].login.focus();
+
+}
+
+
+function isVisible(tag) {
+    var t = $(tag);
+    var w = $(window);
+    var wt = w.scrollTop();
+    var tt = t.offset().top;
+    var tb = tt + t.height();
+    return ((tb <= wt + w.height()) && (tt >= wt));
+}
+function pdf_icon(b) {
+  if (!b.prop("shown") && isVisible(b)) {
+    b.prop("shown", true);
+    b.load("ispdf.asp?itemid=" + b.attr('name').substring(4) + "&rand=" + Math.random());
+  }
+}
+function get_pdfs(){
+  $('div[id^="pdf_"]:not(prop("shown"))').each(function(){
+    pdf_icon($(this))
+  });
+}
+setInterval(function() {
+  if ( didScroll2 ) {
+	didScroll2=false;
+	get_pdfs();
+    }
+ }, 200);
+
+</script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuTitle {background-color: #CCCCCC; margin: -1px -1px 1px -1px; text-align: center; font-style: italic; font-size: 80%; color: #444444; padding: 2px 0; overflow: hidden}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style></head>
+
+<body onload="document.all.loading.style.display=&quot;none&quot;; document.all.thepage.style.display=&quot;&quot;"><div id="MathJax_Message" style="display: none;"></div>
+
+<div id="loading" style="position: absolute; width: 100%; text-align: center; top: 300px; display: none;">
+Пожалуйста, подождите, <br>пока Ваш запрос будет обработан
+<br><img src="/pic/query_wait.gif" width="31" vspace="5" height="31" border="0"></div>
+
+<div id="thepage" style="">
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center">
+
+
+<table cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td id="leftcol" style="width: 216px;" width="170" valign="top" align="left">
+
+<table width="150" cellspacing="0" cellpadding="0" border="0">
+
+<tbody><tr><td><a href="/defaultx.asp"><img src="/images/welcome1.jpg" title="НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА eLIBRARY.RU" width="150" vspace="15" border="0"></a></td></tr>
+
+
+<tr><td><a href="/defaultx.asp"><img id="elibrary_logo" src="/images/elibrary_logo2.svg" title="eLIBRARY.RU - НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА" width="150" vspace="10" height="39" border="0"></a></td></tr>
+<script language="JavaScript">
+if (supportsSVG) {
+  document.getElementById("elibrary_logo").src="/images/elibrary_logo2.svg";}
+else {
+  document.getElementById("elibrary_logo").src="/images/elibrary_logo.gif";}
+</script>
+<tr><td><img src="/pic/1pix.gif" vspace="7"></td></tr>
+
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_basket').slideToggle(500, function(){didScroll = true;})" title="Состояние корзины в электронном магазине eLIBRARY.ru">КОРЗИНА</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_basket" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="2" border="0">
+
+<tbody><tr><td width="100%" valign="top" align="center">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Всего в корзине:&nbsp;</font><font color="#00008f"><b><span id="basket_num">0</span></b>&nbsp;публ.</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+&nbsp;<font color="#000000">на сумму:&nbsp;</font><font color="#00008f"><b><span id="basket_sum">0</span></b>&nbsp;руб.</font></td></tr>
+
+
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr class="menub"><td width="30" valign="bottom" align="center"><a href="/basket.asp"><img src="images/basket.png" width="15" height="15" border="0"></a></td><td width="110" valign="top" align="left"><a href="/basket.asp">Содержание корзины</a></td></tr>
+</tbody></table>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function check_search(){
+if (document.forms["search"].ftext.value.length > 1) {
+  var frm = document.forms["search"];
+  frm.action="/query_results.asp";
+  frm.target="";
+  frm.submit();
+  }
+else {
+  alert("Введите не менее двух символов");
+  }
+}
+function search_enter(event){ 
+  var keycode; 
+  event = event || window.event; 
+  keycode = event.keyCode || event.which;
+  if(keycode==13){
+    check_search();
+	return false;
+  }
+} 
+</script>
+<form method="post" name="search" onsubmit="return false"></form>
+<input type="hidden" name="where_fulltext" value="on">
+<input type="hidden" name="where_name" value="on">
+<input type="hidden" name="where_abstract" value="on">
+<input type="hidden" name="where_keywords" value="on">
+<input type="hidden" name="where_affiliation" value="on">
+<input type="hidden" name="where_references" value="on">
+<input type="hidden" name="type_article" value="on">
+<input type="hidden" name="type_disser" value="on">
+<input type="hidden" name="type_book" value="on">
+<input type="hidden" name="type_report" value="on">
+<input type="hidden" name="type_conf" value="on">
+<input type="hidden" name="type_patent" value="on">
+<input type="hidden" name="type_preprint" value="on">
+<input type="hidden" name="search_freetext" value="">
+<input type="hidden" name="search_morph" value="on">
+<input type="hidden" name="search_fulltext" value="">
+<input type="hidden" name="search_open" value="">
+<input type="hidden" name="search_results" value="">
+<input type="hidden" name="titles_all" value="">
+<input type="hidden" name="authors_all" value="">
+<input type="hidden" name="rubrics_all" value="">
+<input type="hidden" name="queryboxid" value="">
+<input type="hidden" name="itemboxid" value="">
+<input type="hidden" name="begin_year" value="">
+<input type="hidden" name="end_year" value="">
+<input type="hidden" name="issues" value="all">
+<input type="hidden" name="orderby" value="rank">
+<input type="hidden" name="order" value="rev">
+<input type="hidden" name="changed" value="1">
+
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_search').slideToggle(500, function(){didScroll = true;})" title="Поиск в Научной электронной библиотеке">ПОИСК</span></b></font>
+</td></tr>
+</tbody></table>
+<div id="win_search" class="collapsed">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="140" valign="top" align="center">
+<div style="height: 10px;"></div>
+<div class="formfr" style="width:126px;"><input type="text" id="ftext" name="ftext" value="" style="width:118px;" class="inputt" onkeypress="search_enter(event);"></div>
+<div style="height: 11px;"></div>
+
+<div class="butblue" style="width: 52px;" onclick="check_search()">Найти</div>
+
+</td></tr>
+<tr><td><img src="/pic/1pix.gif"></td></tr>
+</tbody></table>
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr class="menub"><td width="20" valign="bottom" align="center"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" height="7"></td><td width="120" valign="top" align="left"><a href="/querybox.asp?scope=newquery">Расширенный поиск</a></td></tr></tbody></table>
+<div style="height: 4px;"></div>
+</div>
+</div>
+
+
+
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function check_all(){
+  if (document.forms["login"].login.value==""){
+    alert("Не указано имя пользователя!");
+	return false;
+	}
+  else if (document.forms["login"].password.value==""){
+    alert("Не указан пароль!");
+	return false;
+	}
+  else{
+    var frm = document.forms["login"];
+    frm.action="/start_session.asp";
+    frm.target="";
+    frm.submit();
+   }
+}
+function login_enter(event){ 
+  var keycode; 
+  event = event || window.event; 
+  keycode = event.keyCode || event.which;
+  if(keycode==13){
+    check_all();
+	return false;
+  }
+} 
+</script>
+
+<form method="post" name="login" onsubmit="return false"></form>
+<input type="hidden" name="rpage" value="http://www.elibrary.ru/author_items.asp?authorid=679517&amp;show_refs=1&amp;org_order=0&amp;sortorder=0&amp;itembox_name=&amp;authorhash=Марков" А="" В&paysum="&amp;add_all=&amp;hide_doubles=1&amp;author_order=0&amp;check_show_refs=on&amp;year_order=1&amp;type_order=0&amp;auth=&amp;show_hash=0&amp;itemboxid=0&amp;check_hide_doubles=on&amp;rubric_order=0&amp;role_order=0&amp;order=1&amp;pagenum=3&amp;title_order=0&amp;show_option=0&amp;slight=&amp;items_all=&amp;keyword_order=0&amp;">
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_login').slideToggle(500, function(){didScroll = true;})" title="Вход в библиотеку для зарегистрированных пользователей">ВХОД</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_login" class="expanded">
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="2" border="0">
+
+<tbody><tr><td width="100%" valign="top" align="left">
+&nbsp;<font color="#000000">IP-адрес компьютера:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">95.174.218.200</font></td></tr>
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Название организации:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+<font color="#00008f">не определена</font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Имя пользователя:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<div class="formfr" style="width:126px;"><input type="text" id="login" name="login" value="" style="width:118px; text-align:center;" class="inputt" onkeypress="login_enter(event)"></div>
+</td></tr>
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Пароль:</font></td></tr>
+<tr><td width="100%" align="center">
+<div class="formfr" style="width:126px;"><input type="password" id="password" name="password" value="" style="width:118px; text-align:center;" class="inputt" onkeypress="login_enter(event)"></div>
+</td></tr>
+
+<tr><td width="100%" align="center">
+
+<div style="height: 9px;"></div>
+<div class="butred" style="width: 52px;" onclick="check_all()">Вход</div>
+<div style="height: 9px;"></div>
+
+</td></tr></tbody></table>
+
+<table width="140" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menub" valign="middle"><td width="30" align="center"><input type="checkbox" name="knowme"></td><td width="101" align="left">Запомнить меня</td></tr>
+<tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="9" height="7"></td><td width="101" valign="top" align="left"><a href="/access_terms.asp">Правила доступа</a></td></tr>
+<tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="9" height="7"></td><td width="101" valign="top" align="left"><a href="/author_info.asp?isnew=1&amp;rpage=http%3A%2F%2Fwww%2Eelibrary%2Eru%2Fauthor%5Fitems%2Easp%3Fauthorid%3D679517%26show%5Frefs%3D1%26org%5Forder%3D0%26sortorder%3D0%26itembox%5Fname%3D%26authorhash%3D%D0%9C%D0%B0%D1%80%D0%BA%D0%BE%D0%B2+%D0%90+%D0%92%26paysum%3D%26add%5Fall%3D%26hide%5Fdoubles%3D1%26author%5Forder%3D0%26check%5Fshow%5Frefs%3Don%26year%5Forder%3D1%26type%5Forder%3D0%26auth%3D%26show%5Fhash%3D0%26itemboxid%3D0%26check%5Fhide%5Fdoubles%3Don%26rubric%5Forder%3D0%26role%5Forder%3D0%26order%3D1%26pagenum%3D3%26title%5Forder%3D0%26show%5Foption%3D0%26slight%3D%26items%5Fall%3D%26keyword%5Forder%3D0%26">Регистрация</a></td></tr>
+<tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="9" height="7"></td><td width="101" valign="top" align="left"><a href="/pass_request.asp">Забыли пароль?</a></td></tr>
+</tbody></table>
+<div style="height: 4px;"></div>
+</div>
+</div>
+</td></tr>
+
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_goto').slideToggle(500, function(){didScroll = true;})" title="Быстрый переход на популярные страницы сайта">НАВИГАТОР</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_goto" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="4" cellpadding="0" border="0">
+
+<tbody><tr valign="top"><td width="25" align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td width="115" align="left"><a href="/titles.asp">ЖУРНАЛЫ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/books.asp">КНИГИ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/patents.asp">ПАТЕНТЫ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/querybox.asp">ПОИСК</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/authors.asp">АВТОРЫ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/orgs.asp">ОРГАНИЗАЦИИ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/keywords.asp">КЛЮЧЕВЫЕ СЛОВА</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" class="shadow" width="7" hspace="3" height="7" border="0"></td><td align="left"><a href="/rubrics.asp">РУБРИКАТОР</a></td></tr>
+
+
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr class="menub"><td width="25" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="6" height="7" border="0"></td><td width="115" valign="top" align="left"><a href="/defaultx.asp">Начальная страница</a></td></tr></tbody></table>
+<div style="height: 4px;"></div>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_legend').slideToggle(500, function(){didScroll = true;})" title="Назначение используе">ЛЕГЕНДА</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_legend" class="expanded">
+
+<div style="height: 10px;"></div>
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+<tbody><tr><td width="15%" valign="top" align="right"><img src="/images/pdf_green.gif" width="16" hspace="3" height="16" border="0"></td>
+<td width="85%" valign="middle" align="left"><font color="#00008f">Доступ к полному тексту документа открыт</font></td></tr>
+<tr><td valign="top" align="right"><img src="/images/pdf_blue.gif" width="16" hspace="3" height="16" border="0"></td>
+<td valign="middle" align="left"><font color="#00008f">Полный текст доступен на сайте издателя</font></td></tr>
+<tr><td valign="top" align="right"><img src="/images/pdf_yellow.gif" width="16" hspace="3" height="16" border="0"></td>
+<td valign="middle" align="left"><font color="#00008f">Полный текст может быть получен через систему заказа</font></td></tr>
+<tr><td valign="top" align="right"><img src="/images/pdf_red.gif" width="16" hspace="3" height="16" border="0"></td>
+<td valign="middle" align="left"><font color="#00008f">Доступ к полному тексту закрыт</font></td></tr>
+<tr><td valign="top" align="center"><font color="#00008f">-</font></td><td align="left"><font color="#00008f">Если иконки нет - полный текст документа отсутствует в НЭБ</font></td></tr>
+
+<tr><td valign="top" align="right"><img src="/images/ref.gif" width="16" hspace="3" height="14" border="0"></td>
+<td align="left"><font color="#00008f">Публикация из списков цитируемой литературы</font></td></tr>
+
+</tbody></table>
+
+</div></div>
+</td></tr>
+
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function end_session(){
+
+  document.forms["session"].saveuser.value="1";
+
+  document.forms["session"].action="/end_session.asp";
+  document.forms["session"].target="";
+  document.forms["session"].submit()
+}
+</script>
+<form action="/end_session.asp" method="POST" name="session"></form>
+<input type="hidden" name="saveuser" value="1">
+
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_session').slideToggle(500, function(){didScroll = true;})" title="Информация о текущей сессии пользователя">СЕССИЯ</span></b></font>
+</td></tr>
+</tbody></table>
+
+
+<div id="win_session" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="2" border="0">
+<tbody><tr><td width="100%" valign="top" align="left">
+&nbsp;<font color="#000000">Имя пользователя:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">Незарегистрированный пользователь</font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">IP-адрес компьютера:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">95.174.218.200</font></td></tr>
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Название организации:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+<font color="#00008f">не определена</font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Начало работы:</font></td></tr>
+
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">10.03.2021 14:39</font></td></tr>
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Время работы:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">00:01</font></td></tr>
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="6" height="7" border="0"></td><td width="110" valign="top" align="left"><a href="/project_user_office.asp">Личный кабинет</a></td></tr>
+<tr><td><div style="height: 4px;"></div></td></tr>
+<tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="6" height="7" border="0"></td><td width="110" valign="top" align="left"><a href="javascript:end_session()">Закрыть сессию</a></td></tr>
+</tbody></table>
+<div style="height: 4px;"></div>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+
+
+<tr><td width="100%" valign="top" align="center">
+
+<div class="left-panel">
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_contact').slideToggle(500, function(){didScroll = true;})" title="Контактная информация Научной электронной библиотеки">КОНТАКТЫ</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_contact" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="2" border="0">
+
+
+<tbody><tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Служба поддержки:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 1<br></font>
+<font color="#00008f"><a href="mailto:support@elibrary.ru">support@elibrary.ru</a></font></td></tr>
+
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Издателям журналов:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 2<br></font>
+<font color="#00008f"><a href="mailto:publish@elibrary.ru">publish@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Издателям книг:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 3<br></font>
+<font color="#00008f"><a href="mailto:book@elibrary.ru">book@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">DOI для издательств:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 7<br></font>
+<font color="#00008f"><a href="mailto:doi@elibrary.ru">doi@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Организациям (Science Index):</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:org@scienceindex.ru">org@scienceindex.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Доступ к API:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 7<br></font>
+<font color="#00008f"><a href="mailto:api@elibrary.ru">api@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Подписчикам:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 8<br></font>
+<font color="#00008f"><a href="mailto:sales.team@elibrary.ru">sales.team@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Конференции, семинары:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 5<br></font>
+<font color="#00008f"><a href="mailto:conf@elibrary.ru">conf@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Почтовый адрес:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f"><a href="/contact_new.asp">117246, г. Москва,
+Научный проезд, д. 14А, стр. 3, таунхаус 1</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Веб-сайт:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f"><a href="https://elibrary.ru">https://elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" align="left">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Размещение рекламы:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f"><a href="mailto:reklama@elibrary.ru">reklama@elibrary.ru</a></font></td></tr>
+
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table width="140" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="6" height="7" border="0"></td><td width="110" valign="top" align="left"><a href="/contact_new.asp">Схема проезда</a></td></tr>
+
+
+<tr class="menub"><td width="30" valign="bottom" align="right"><img src="/images/or_kv.gif" class="shadow" width="7" vspace="1" hspace="6" height="7" border="0"></td><td width="110" valign="top" align="left"><a href="http://support.elibrary.ru">Задать вопрос</a></td></tr>
+
+</tbody></table>
+<div style="height: 4px;"></div>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<div style="width: 140px;" class="help-panel">
+<table width="140" cellspacing="0" cellpadding="3" border="0">
+<tbody><tr><td width="15%" valign="top" align="right">
+<img src="/images/but_orange_i.gif" width="15" hspace="0" height="15" border="0"></td>
+<td width="85%" valign="middle" align="left"><font color="#00008f">По всем вопросам, связанным с работой в системе Science Index, обращайтесь, пожалуйста, в службу поддержки:<br><br>
+7 (495) 544-2494<br><a href="mailto:support@elibrary.ru">support@elibrary.ru</a></font>
+</td></tr>
+</tbody></table>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+
+
+</tbody></table>
+
+</td><td valign="top" align="left">
+
+<form method="post" name="results" onsubmit="return false">
+
+<table cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="600" valign="top" align="left">
+
+<table width="580" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="left">
+
+<div class="header-panel">
+<div style="margin: 0; border: 0; padding: 0 0 5px 0; text-align: center; font-size: 9pt;"><font color="#5674b9"><b>СПИСОК ПУБЛИКАЦИЙ АВТОРА</b></font></div>
+</div>
+
+</td></tr></tbody></table>
+
+</td><td id="rightcol" style="width: 246px;" width="200" valign="middle" align="right">
+<a href="/project_risc.asp"><img id="scienceindex_logo2" src="/images/scienceindex_logo2.svg" title="Информационно-аналитическая система SCIENCE INDEX" width="173" hspace="5" height="49" border="0"></a></td></tr>
+<script language="JavaScript">
+if (supportsSVG) {
+  document.getElementById("scienceindex_logo2").src="/images/scienceindex_logo2.svg";}
+else {
+  document.getElementById("scienceindex_logo2").src="/images/scienceindex_logo2.png";}
+</script>
+<tr><td valign="top" align="left">
+
+<table width="580" cellspacing="0" cellpadding="0" border="0">
+
+<input type="hidden" name="itembox_name" value="">
+<input type="hidden" name="auth" value="">
+<input type="hidden" name="authorid" value="679517">
+<input type="hidden" name="authorhash" value="Марков А В">
+<input type="hidden" name="pagenum" value="3">
+<input type="hidden" name="add_all" value="">
+<input type="hidden" name="paysum" value="">
+<input type="hidden" name="slight" value="">
+<input type="hidden" name="show_refs" value="1">
+<input type="hidden" name="hide_doubles" value="1">
+<input type="hidden" name="items_all" value="">
+
+<tbody><tr><td width="100%" valign="top" align="left">
+
+<div style="width:540px; margin:0 20px 20px 20px; border:0; padding:0; text-align: center; font-size: 9pt;">
+<font color="#F26C4F"><b>МАРКОВ АНТОН ВЛАДИМИРОВИЧ</b></font>  <span class="aster" title="Автор зарегистрирован в SCIENCE INDEX">*</span>
+<br><a href="org_about.asp?orgsid=519">Томский национальный исследовательский медицинский центр РАН</a>, Научно-исследовательский институт медицинской генетики, Лаборатория популяционной генетики (Томск)
+</div>
+
+<div class="form-panel">
+
+<div style="margin:0; border:0; padding:0;">
+<font color="#F26C4F"><b><span class="expandable" onclick="$('#show_param').slideToggle(500, function(){didScroll = true;})" title="Показать/скрыть параметры поиска">ПАРАМЕТРЫ</span></b></font>
+</div>
+
+<div id="show_param" class="expanded">
+
+<div style="height:5px;"></div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_rubrics" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_rubrics">ТЕМАТИКА</span></font><span id="rubricsheader" name="rubricsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="rubrics" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="rubric_order" style="width:168px;" class="input" id="rubric_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по названию рубрики
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;rubric&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;rubric&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="rubrics_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_titles" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_titles">ЖУРНАЛЫ</span></font><span id="titlesheader" name="titlesheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="titles" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="title_order" style="width:168px" class="input" id="title_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по названию журнала
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;title&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;title&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="titles_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_orgs" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_orgs">ОРГАНИЗАЦИИ</span></font><span id="orgsheader" name="orgsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="orgs" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="org_order" style="width:168px" class="input" id="org_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по названию организации
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;org&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;org&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="orgs_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_authors" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_authors">АВТОРЫ</span></font><span id="authorsheader" name="authorsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="authors" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="author_order" style="width:168px" class="input" id="author_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по фамилии
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;author&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;author&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="authors_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_years" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_years">ГОДЫ</span></font><span id="yearsheader" name="yearsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="years" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="year_order" style="width:168px" class="input" id="year_order">
+<option value="0">по числу публикаций
+</option><option value="1" selected="">по году
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;year&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;year&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="years_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_types" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_types">ТИП ПУБЛИКАЦИИ</span></font><span id="typesheader" name="typesheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="types" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="type_order" style="width:168px" class="input" id="type_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по типу публикации
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;type&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;type&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="types_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_roles" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_roles">УЧАСТИЕ В ПУБЛИКАЦИИ</span></font><span id="rolesheader" name="rolesheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="roles" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="role_order" style="width:168px" class="input" id="role_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по способу участия
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;role&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;role&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="roles_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="middle"><td width="30" valign="middle" align="right"><div id="txt_keywords" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" valign="middle" align="left"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_keywords">КЛЮЧЕВЫЕ СЛОВА</span></font><span id="keywordsheader" name="keywordsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="keywords" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" valign="middle" align="right"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" valign="middle" align="left"><select name="keyword_order" style="width:168px" class="input" id="keyword_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по ключевому слову
+</option><option value="2">выделенные в начале
+</option></select></td><td class="menus" width="110" valign="middle" align="right"><a href="javascript:select_options(&quot;keyword&quot;)">Выделить все</a></td><td class="menus" width="130" valign="middle" align="center"><a href="javascript:deselect_options(&quot;keyword&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="keywords_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<div style="height:5px;">&nbsp;</div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="top"><td width="514" valign="top" align="left"><font color="#00008f">&nbsp;&nbsp;Выбрать:</font></td></tr>
+<tr><td valign="top" align="left">
+<div class="formfr"><select id="show_option" name="show_option" style="width:510px" class="input" onkeypress="submit_enter(event)">
+<option value="1">все публикации автора на портале elibrary.ru
+</option><option value="0" selected="">публикации автора, включенные в РИНЦ
+</option><option value="2">публикации автора, включенные в ядро РИНЦ
+</option><option value="5">статьи в российских журналах, включенных в текущий перечень ВАК
+</option><option value="3">статьи в российских журналах, входящих в Russian Science Citation Index
+</option><option value="4">статьи в журналах, входящих в Web of Science или Scopus
+</option></select></div></td></tr>
+</tbody></table>
+
+<div style="height:5px;">&nbsp;</div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="top"><td width="514" valign="top" align="left"><font color="#00008f">&nbsp;&nbsp;Показывать:</font></td></tr>
+<tr><td valign="top" align="left">
+<div class="formfr"><select id="show_hash" name="show_hash" style="width:510px" class="input" onkeypress="submit_enter(event)">
+<option value="0" selected="">включенные в список работ автора (привязанные) публикации
+</option><option value="1">непривязанные публикации, которые могут принадлежать данному автору
+
+</option></select></div></td></tr>
+</tbody></table>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr><td width="24" align="right"><input type="checkbox" name="check_show_refs" id="check_show_refs" checked="" onclick="if (this.checked) {document.forms[&quot;results&quot;].show_refs.value=&quot;1&quot;;} else {document.forms[&quot;results&quot;].show_refs.value=&quot;0&quot;;}"></td><td width="484" align="left">- учитывать публикации, извлеченные из списков цитируемой литературы&nbsp;<img src="/images/but_orange_question.gif" class="imghelp help"></td></tr>
+<tr><td width="24" align="right"><input type="checkbox" name="check_hide_doubles" id="check_hide_doubles" checked="" onclick="if (this.checked) {document.forms[&quot;results&quot;].hide_doubles.value=&quot;1&quot;;} else {document.forms[&quot;results&quot;].hide_doubles.value=&quot;0&quot;;}"></td><td width="484" align="left">- объединять оригинальные и переводные версии статей и переиздания книг&nbsp;<img src="/images/but_orange_question.gif" class="imghelp help"></td></tr>
+</tbody></table>
+
+<div style="height:5px;"></div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr class="menus" valign="top"><td width="170" valign="top" align="left"><font color="#00008f">&nbsp;&nbsp;Сортировка:</font></td><td width="15"></td><td width="139" valign="top" align="left"><font color="#00008f">&nbsp;&nbsp;Порядок:</font></td><td width="15"></td><td width="80"></td><td width="80"></td></tr>
+<tr valign="top" align="left">
+<td><div class="formfr"><select id="sortorder" name="sortorder" style="width:166px" class="input" onchange="var ord = document.forms[&quot;results&quot;].order; switch(this.value) {case &quot;0&quot; : ord.value=&quot;1&quot;; break; case &quot;1&quot; : ord.value=&quot;0&quot;; break; case &quot;2&quot; : ord.value=&quot;0&quot;; break; case &quot;3&quot; : ord.value=&quot;1&quot;; break; }" onkeypress="submit_enter(event)">
+<option value="0" selected="">по дате выпуска
+</option><option value="1">по названию публикации
+</option><option value="2">по названию журнала
+</option><option value="3">по числу цитирований
+</option><option value="4">по дате размещения
+</option></select></div></td>
+<td></td>
+<td><div class="formfr"><select id="order" name="order" style="width:135px" class="input" onkeypress="submit_enter(event)">
+<option value="0">по возрастанию
+</option><option value="1" selected="">по убыванию
+</option></select></div></td>
+<td></td>
+<td valign="middle" align="left">
+<div class="butblue" style="width: 67px;" onclick="reset_form()">Очистить</div>
+</td>
+<td valign="middle" align="right">
+<div class="butred" style="width: 67px;" onclick="pub_search()">Поиск</div>
+</td>
+</tr>
+</tbody></table>
+
+<div style="height:8px;"></div>
+</div>
+</div>
+
+
+
+<div style="width: 480px; margin: 10px 0 10px 30px; border: 0; padding: 10px 20px 7px 20px; text-align: center;">
+<table width="480" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr><td width="40" valign="top" align="right"><img src="images/but_orange_i.gif" width="15" hspace="10" height="15" border="0"></td><td class="redref" width="431" valign="top" align="left"><font color="#00008f">Всего найдено</font> <b><font color="#ff0000">116</font></b> <font color="#00008f">публикаций с общим количеством цитирований: </font><b><font color="#ff0000"><span id="totalcited">128</span></font></b><font color="#00008f">.<br>Показано на данной странице: с <b>41</b> по <b>60</b>.</font></td></tr></tbody></table>
+</div>
+
+<table id="restab" style="border-spacing: 0px 4px;" width="580" cellspacing="0" cellpadding="3">
+<tbody><tr valign="middle" height="15" align="center">
+<td width="24"><font color="#555555">&nbsp;<b>№</b></font></td>
+<td width="514"><font color="#555555"><b>Публикация</b></font></td>
+<td width="24"><span title="Число цитирований публикации в РИНЦ"><font color="#555555"><b>Цит.</b></font></span></td></tr>
+<tr><td colspan="3">
+<div style="width: 574px;" class="table-line"></div>
+</td></tr>
+
+<tr><td colspan="3" height="0"></td></tr>
+
+
+
+<tr id="arw41376400" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>41.</b></font><br><input type="checkbox" name="tid41376400" id="tid41376400" onclick="if (this.checked) {RowSelect(&quot;arw41376400&quot;,1)} else {RowSelect(&quot;arw41376400&quot;,0)}"><div id="pdf_41376400" name="pdf_41376400"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41376400"><b><span style="line-height:1.0;">ГЕНЕТИЧЕСКИЕ ОСОБЕННОСТИ ФОРМИРОВАНИЯ КОМОРБИДНОСТИ БОЛЕЗНЕЙ СЕРДЕЧНО-СОСУДИСТОГО КОНТИНУУМА</span></b></a><br><font color="#00008f"><i>Гончарова И.А., Назаренко Л.П., Марков А.В., Тарасенко Н.В., Печерина Т.Б., Кашталап В.В., Понасенко А.В., Барбараш О.Л., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+ В книге: Генетика человека и патология: актуальные проблемы клинической и молекулярной цитогенетики.&nbsp;сборник научных трудов. 2019.  С. 20-22.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw41376420" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>42.</b></font><br><input type="checkbox" name="tid41376420" id="tid41376420" onclick="if (this.checked) {RowSelect(&quot;arw41376420&quot;,1)} else {RowSelect(&quot;arw41376420&quot;,0)}"><div id="pdf_41376420" name="pdf_41376420"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41376420"><b><span style="line-height:1.0;">МИКРОРНК MIR-326: СОГЛАСОВАННОСТЬ ИЗМЕНЕНИЙ МЕТИЛИРОВАНИЯ ДНК И ЭКСПРЕССИИ В АТЕРОСКЛЕРОТИЧЕСКИХ БЛЯШКАХ СОННЫХ АРТЕРИЙ</span></b></a><br><font color="#00008f"><i>Зарубин А.А., Марков А.В., Шарыш Д.В., Казанцев А.Н., Бурков Н.Н., Барбараш О.Л., Пузырев В.П., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В книге: Генетика человека и патология: актуальные проблемы клинической и молекулярной цитогенетики.&nbsp;сборник научных трудов. 2019.  С. 25-27.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw41376496" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>43.</b></font><br><input type="checkbox" name="tid41376496" id="tid41376496" onclick="if (this.checked) {RowSelect(&quot;arw41376496&quot;,1)} else {RowSelect(&quot;arw41376496&quot;,0)}"><div id="pdf_41376496" name="pdf_41376496"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41376496"><b><span style="line-height:1.0;">ВАРИАБЕЛЬНОСТЬ МЕТИЛИРОВАНИЯ ГЕНОВ MIR21 И CARMN (MIR143HG) ПРИ ОСЛОЖНЕННОМ ТЕЧЕНИИ АТЕРОСКЛЕРОЗА</span></b></a><br><font color="#00008f"><i>Королёва Ю.А., Салахов Р.Р., Марков А.В., Шарыш Д.В., Слепцов А.А., Казанцев А.Н., Барбараш О.Л., Бурков Н.Н., Пузырев В.П., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В книге: Генетика человека и патология: актуальные проблемы клинической и молекулярной цитогенетики.&nbsp;сборник научных трудов. 2019.  С. 31-32.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw41376720" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>44.</b></font><br><input type="checkbox" name="tid41376720" id="tid41376720" onclick="if (this.checked) {RowSelect(&quot;arw41376720&quot;,1)} else {RowSelect(&quot;arw41376720&quot;,0)}"><div id="pdf_41376720" name="pdf_41376720"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41376720"><b><span style="line-height:1.0;">КЛЕТОЧНАЯ ГЕТЕРОГЕННОСТЬ ПРИ АНАЛИЗЕ МЕТИЛИРОВАНИЯ ДНК В ПОРАЖЕННЫХ АТЕРОСКЛЕРОЗОМ АРТЕРИЯХ</span></b></a><br><font color="#00008f"><i>Марков А.В., Зарубин А.А., Шарыш Д.В., Казанцев А.Н., Бурков Н.Н., Барбараш О.Л., Пузырев В.П., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В книге: Генетика человека и патология: актуальные проблемы клинической и молекулярной цитогенетики.&nbsp;сборник научных трудов. 2019.  С. 39-40.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw41386954" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>45.</b></font><br><input type="checkbox" name="tid41386954" id="tid41386954" onclick="if (this.checked) {RowSelect(&quot;arw41386954&quot;,1)} else {RowSelect(&quot;arw41386954&quot;,0)}"><div id="pdf_41386954" name="pdf_41386954"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41386954"><b><span style="line-height:1.0;">ТКАНЕСПЕЦИФИЧНОЕ МЕТИЛИРОВАНИЕ ДНК РЕГУЛЯТОРНЫХ ОБЛАСТЕЙ ГЕНОВ ABCA1 И ABCG1 В ЖИРОВОЙ ТКАНИ ПРИ ИШЕМИЧЕСКОЙ БОЛЕЗНИ СЕРДЦА</span></b></a><br><font color="#00008f"><i>Пантелеева А.А., Мирошникова В.В., Марков А.В., Назаренко М.С., Побожева И.А., Разгильдина Н.А., Беляева О.Д., Полякова Е.А., Беркович О.А., Баранова Е.И., Пчелина С.Н.</i></font><br>
+<font color="#00008f">
+ В книге: Генетика человека и патология: актуальные проблемы клинической и молекулярной цитогенетики.&nbsp;сборник научных трудов. 2019.  С. 51-52.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw38690103" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>46.</b></font><br><input type="checkbox" name="tid38690103" id="tid38690103" onclick="if (this.checked) {RowSelect(&quot;arw38690103&quot;,1)} else {RowSelect(&quot;arw38690103&quot;,0)}"><div id="pdf_38690103" name="pdf_38690103"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=38690103"><b><span style="line-height:1.0;">COMPARATIVE ANALYSIS OF GENE EXPRESSION IN VASCULAR CELLS OF PATIENTS WITH ADVANCED ATHEROSCLEROSIS</span></b></a><br><font color="#00008f"><i>Nazarenko M.S., Markov A.V., Sleptcov A.A., Koroleva I.A., Zarubin A.A., Goncharova I.A., Puzyrev V.P., Sharysh D.V., Valiahmetov N.R., Muslimova E.F., Kuznetsov M.S., Kozlov B.N., Afanasiev S.A.</i></font><br>
+<font color="#00008f">
+<a href="/contents.asp?id=38688936">Biochemistry (Moscow) Supplement. Series B: Biomedical Chemistry</a>. 
+2019. 
+Т. 13. <a href="/contents.asp?id=38688936&amp;selid=38690103">№&nbsp;1</a>.  С. 74-80.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw41420629" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>47.</b></font><br><input type="checkbox" name="tid41420629" id="tid41420629" onclick="if (this.checked) {RowSelect(&quot;arw41420629&quot;,1)} else {RowSelect(&quot;arw41420629&quot;,0)}"><div id="pdf_41420629" name="pdf_41420629"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41420629"><b><span style="line-height:1.0;">ПРОБЛЕМА КЛЕТОЧНОЙ ГЕТЕРОГЕННОСТИ ПРИ АНАЛИЗЕ МЕТИЛИРОВАНИЯ ДНК В ОБРАЗЦАХ ПОРАЖЕННЫХ АТЕРОСКЛЕРОЗОМ АРТЕРИЙ: БИОИНФОРМАТИЧЕСКИЙ ПОДХОД</span></b></a><br><font color="#00008f"><i>Марков А.В., Зарубин А.А., Шарыш Д.В., Казанцев А.Н., Бурков Н.Н., Барбараш О.Л., Пузырев В.П., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+<a href="/contents.asp?id=41420601">Комплексные проблемы сердечно-сосудистых заболеваний</a>. 
+2019. 
+Т. 8. <a href="/contents.asp?id=41420601&amp;selid=41420629">№&nbsp;S3-2</a>.  С. 37.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw41420652" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>48.</b></font><br><input type="checkbox" name="tid41420652" id="tid41420652" onclick="if (this.checked) {RowSelect(&quot;arw41420652&quot;,1)} else {RowSelect(&quot;arw41420652&quot;,0)}"><div id="pdf_41420652" name="pdf_41420652"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=41420652"><b><span style="line-height:1.0;">МЕТОДЫ ДЕЗАГРЕГАЦИИ АРТЕРИЙ, ПОРАЖЕННЫХ АТЕРОСКЛЕРОЗОМ</span></b></a><br><font color="#00008f"><i>Шарыш Д.В., Марков А.В., Кебекбаева А.Е., Дампилова Т.Д., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+<a href="/contents.asp?id=41420601">Комплексные проблемы сердечно-сосудистых заболеваний</a>. 
+2019. 
+Т. 8. <a href="/contents.asp?id=41420601&amp;selid=41420652">№&nbsp;S3-2</a>.  С. 69.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36558133" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>49.</b></font><br><input type="checkbox" name="tid36558133" id="tid36558133" onclick="if (this.checked) {RowSelect(&quot;arw36558133&quot;,1)} else {RowSelect(&quot;arw36558133&quot;,0)}"><div id="pdf_36558133" name="pdf_36558133"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36558133"><b><span style="line-height:1.0;">МЕТИЛИРОВАНИЕ ГЕНОВ МИКРОРНК ПРИ ДЕСТАБИЛИЗАЦИИ АТЕРОСКЛЕРОТИЧЕСКОЙ БЛЯШКИ</span></b></a><br><font color="#00008f"><i>Марков А.В., Кучер А.Н., Назаренко М.С., Зарубин А.А., Шарыш Д.В., Барбараш О.Л., Казанцев А.Н., Бурков Н.Н., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+ В сборнике: Молекулярная диагностика 2018.&nbsp;Сборник трудов Международной научно-практической конференции. 2018.  С. 102-103.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36832106" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>50.</b></font><br><input type="checkbox" name="tid36832106" id="tid36832106" onclick="if (this.checked) {RowSelect(&quot;arw36832106&quot;,1)} else {RowSelect(&quot;arw36832106&quot;,0)}"><div id="pdf_36832106" name="pdf_36832106"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36832106"><b><span style="line-height:1.0;">АНАЛИЗ СВЯЗИ УРОВНЯ МЕТИЛИРОВАНИЯ ПРОМОТОРОВ ГЕНОВ MIR10B И MIR21 С НЕСТАБИЛЬНОСТЬЮ АТЕРОСКЛЕРОТИЧЕСКИХ БЛЯШЕК СОННЫХ АРТЕРИЙ</span></b></a><br><font color="#00008f"><i>Королёва Ю.А., Марков А.В., Казанцев А.Н., Барбараш О.Л., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В сборнике: Актуальные вопросы фундаментальной и клинической медицины.&nbsp;Сборник материалов конгресса молодых ученых. Под редакцией Е.Л. Чойнзонова. 2018.  С. 105-107.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36558705" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>51.</b></font><br><input type="checkbox" name="tid36558705" id="tid36558705" onclick="if (this.checked) {RowSelect(&quot;arw36558705&quot;,1)} else {RowSelect(&quot;arw36558705&quot;,0)}"><div id="pdf_36558705" name="pdf_36558705"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36558705"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ ЧИСЛА КОПИЙ МТДНК И УРОВНЯ МЕТИЛИРОВАНИЯ У БОЛЬНЫХ С КАРОТИДНЫМ АТЕРОСКЛЕРОЗОМ И В КОНТРОЛЬНОЙ ВЫБОРКЕ</span></b></a><br><font color="#00008f"><i>Салахов Р.Р., Голубенко М.В., Марков А.В., Слепцов А.А., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В сборнике: Молекулярная диагностика 2018.&nbsp;Сборник трудов Международной научно-практической конференции. 2018.  С. 111.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36832114" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>52.</b></font><br><input type="checkbox" name="tid36832114" id="tid36832114" onclick="if (this.checked) {RowSelect(&quot;arw36832114&quot;,1)} else {RowSelect(&quot;arw36832114&quot;,0)}"><div id="pdf_36832114" name="pdf_36832114"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36832114"><b><span style="line-height:1.0;">СВЯЗЬ МЕТИЛИРОВАНИЯ ГЕНОВ МИКРОРНК СО СТАБИЛЬНОСТЬЮ АТЕРОСКЛЕРОТИЧЕСКОЙ БЛЯШКИ</span></b></a><br><font color="#00008f"><i>Марков А.В., Назаренко М.С., Кучер А.Н., Королёва Ю.А., Зарубин А.А., Шарыш Д.В., Барбараш О.Л., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+ В сборнике: Актуальные вопросы фундаментальной и клинической медицины.&nbsp;Сборник материалов конгресса молодых ученых. Под редакцией Е.Л. Чойнзонова. 2018.  С. 111-113.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36832133" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>53.</b></font><br><input type="checkbox" name="tid36832133" id="tid36832133" onclick="if (this.checked) {RowSelect(&quot;arw36832133&quot;,1)} else {RowSelect(&quot;arw36832133&quot;,0)}"><div id="pdf_36832133" name="pdf_36832133"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36832133"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ ЧИСЛА КОПИЙ МТДНК НА КЛЕТКУ ПРИ АТЕРОСКЛЕРОЗЕ</span></b></a><br><font color="#00008f"><i>Салахов Р.Р., Голубенко М.В., Марков А.В., Слепцов А.А., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В сборнике: Актуальные вопросы фундаментальной и клинической медицины.&nbsp;Сборник материалов конгресса молодых ученых. Под редакцией Е.Л. Чойнзонова. 2018.  С. 126-128.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36559102" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>54.</b></font><br><input type="checkbox" name="tid36559102" id="tid36559102" onclick="if (this.checked) {RowSelect(&quot;arw36559102&quot;,1)} else {RowSelect(&quot;arw36559102&quot;,0)}"><div id="pdf_36559102" name="pdf_36559102"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36559102"><b><span style="line-height:1.0;">СВЯЗЬ УРОВНЯ МЕТИЛИРОВАНИЯ ПРОМОТОРА ГЕНА MIR21 С ПАТОГЕНЕТИЧЕСКИ ЗНАЧИМЫМИ ПРИЗНАКАМИ АТЕРОСКЛЕРОЗА СОННЫХ АРТЕРИЙ</span></b></a><br><font color="#00008f"><i>Королёва Ю.А., Зарубин А.А., Марков А.В., Назаренко М.С.</i></font><br>
+<font color="#00008f">
+ В книге: Российский национальный конгресс кардиологов 2018.&nbsp;МАТЕРИАЛЫ КОНГРЕССА
+
+. 2018.  С. 273.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw38017007" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>55.</b></font><br><input type="checkbox" name="tid38017007" id="tid38017007" onclick="if (this.checked) {RowSelect(&quot;arw38017007&quot;,1)} else {RowSelect(&quot;arw38017007&quot;,0)}"><div id="pdf_38017007" name="pdf_38017007"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=38017007"><b><span style="line-height:1.0;">THE ANALYSIS OF FUNCTIONAL ACTIVITY OF EXTRACELLULAR MATRIX GENES IN CAROTID ATHEROSCLEROTIC PLAQUES</span></b></a><br><font color="#00008f"><i>Goncharova I.А., Markov А.V., Sleptsov А.А., Koroleva Y.А., Sharysh D.V., Zarubin А.А., Valiahmetov N.R., Muslimova E.F., Panfilov D.S., Kozlov B.N., Afanasiev S.А., Puzyrev V.P., Nasarenko М.S.</i></font><br>
+<font color="#00008f">
+ В книге: Bioinformatics of Genome Regulation and Structure\Systems Biology (BGRS\SB-2018).&nbsp;The Eleventh International Conference. 2018.  С. 42.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36557771" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>56.</b></font><br><input type="checkbox" name="tid36557771" id="tid36557771" onclick="if (this.checked) {RowSelect(&quot;arw36557771&quot;,1)} else {RowSelect(&quot;arw36557771&quot;,0)}"><div id="pdf_36557771" name="pdf_36557771"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36557771"><b><span style="line-height:1.0;">СВЯЗЬ ЭКСПРЕССИИ МИКРОРНК В КЛЕТКАХ АТЕРОСКЛЕРОТИЧЕСКИХ БЛЯШЕК СОННЫХ АРТЕРИЙ У ЧЕЛОВЕКА С НЕСТАБИЛЬНОСТЬЮ ПАТОЛОГИЧЕСКОГО ПРОЦЕССА</span></b></a><br><font color="#00008f"><i>Зарубин А.А., Марков А.В., Шарыш Д.В., Назаренко М.С., Барбараш О.Л., Казанцев А.Н., Бурков Н.Н., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+ В сборнике: Молекулярная диагностика 2018.&nbsp;Сборник трудов Международной научно-практической конференции. 2018.  С. 92-93.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36832093" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>57.</b></font><br><input type="checkbox" name="tid36832093" id="tid36832093" onclick="if (this.checked) {RowSelect(&quot;arw36832093&quot;,1)} else {RowSelect(&quot;arw36832093&quot;,0)}"><div id="pdf_36832093" name="pdf_36832093"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36832093"><b><span style="line-height:1.0;">ОЦЕНКА УРОВНЯ ЛЕЙКОЦИТАРНОЙ ИНФИЛЬТРАЦИИ В АТЕРОСКЛЕРОТИЧЕСКОЙ БЛЯШКЕ НА ОСНОВАНИИ ДАННЫХ О МЕТИЛИРОВАНИИ ДНК</span></b></a><br><font color="#00008f"><i>Зарубин А.А., Марков А.В., Шарыш Д.В., Назаренко М.С., Барбараш О.Л., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+ В сборнике: Актуальные вопросы фундаментальной и клинической медицины.&nbsp;Сборник материалов конгресса молодых ученых. Под редакцией Е.Л. Чойнзонова. 2018.  С. 93-95.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw36321124" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>58.</b></font><br><input type="checkbox" name="tid36321124" id="tid36321124" onclick="if (this.checked) {RowSelect(&quot;arw36321124&quot;,1)} else {RowSelect(&quot;arw36321124&quot;,0)}"><div id="pdf_36321124" name="pdf_36321124"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=36321124"><b><span style="line-height:1.0;">СРАВНИТЕЛЬНЫЙ АНАЛИЗ ЭКСПРЕССИИ ГЕНОВ В КЛЕТКАХ СОСУДОВ У БОЛЬНЫХ С КЛИНИЧЕСКИ ВЫРАЖЕННЫМ АТЕРОСКЛЕРОЗОМ</span></b></a><br><font color="#00008f"><i>Назаренко М.С., Марков А.В., Слепцов А.А., Королёва Ю.А., Шарыш Д.В., Зарубин А.А., Валиахметов Н.Р., Гончарова И.А., Муслимова Э.Ф., Кузнецов М.С., Козлов Б.Н., Афанасьев С.А., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+<a href="/contents.asp?id=36321121">Биомедицинская химия</a>. 
+2018. 
+Т. 64. <a href="/contents.asp?id=36321121&amp;selid=36321124">№&nbsp;5</a>.  С. 416-422.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+0</td></tr>
+
+
+
+
+<tr id="arw35357002" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>59.</b></font><br><input type="checkbox" name="tid35357002" id="tid35357002" onclick="if (this.checked) {RowSelect(&quot;arw35357002&quot;,1)} else {RowSelect(&quot;arw35357002&quot;,0)}"><div id="pdf_35357002" name="pdf_35357002"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=35357002"><b><span style="line-height:1.0;">РОЛЬ ГЕНОВ ФИБРОГЕНЕЗА В ФОРМИРОВАНИИ ПОДВЕРЖЕННОСТИ К КОРОНАРНОМУ АТЕРОСКЛЕРОЗУ</span></b></a><br><font color="#00008f"><i>Гончарова И.А., Печерина Т.Б., Марков А.В., Кашталап В.В., Тарасенко Н.В., Пузырев В.П., Барбараш О.А.</i></font><br>
+<font color="#00008f">
+<a href="/contents.asp?id=35356997">Кардиология</a>. 
+2018. 
+Т. 58. <a href="/contents.asp?id=35356997&amp;selid=35357002">№&nbsp;8</a>.  С. 33-44.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+3</td></tr>
+
+
+
+
+<tr id="arw32660683" valign="middle">
+<td class="select-tr-left" valign="top" align="center"><font color="#00008f"><b>60.</b></font><br><input type="checkbox" name="tid32660683" id="tid32660683" onclick="if (this.checked) {RowSelect(&quot;arw32660683&quot;,1)} else {RowSelect(&quot;arw32660683&quot;,0)}"><div id="pdf_32660683" name="pdf_32660683"></div></td>
+<td valign="top" align="left">
+
+<a href="/item.asp?id=32660683"><b><span style="line-height:1.0;">ОЦЕНКА ОБЩЕГО УРОВНЯ МЕТИЛИРОВАНИЯ ДНК ПО МЕТИЛИРОВАНИЮ РЕТРОТРАНСПОЗОНА LINE-1 ПРИ АТЕРОСКЛЕРОЗЕ У ЧЕЛОВЕКА</span></b></a><br><font color="#00008f"><i>Марков А.В., Серебрякова В.В., Назаренко М.С., Голубенко М.В., Барбараш О.Л., Пузырев В.П.</i></font><br>
+<font color="#00008f">
+<a href="/contents.asp?id=34838257">Медицинская генетика</a>. 
+2018. 
+Т. 17. <a href="/contents.asp?id=34838257&amp;selid=32660683">№&nbsp;3</a>.  С. 13-17.
+</font></td><td class="select-tr-right" valign="middle" align="center">
+2</td></tr>
+
+
+
+</tbody></table>
+
+
+<script language="JavaScript">
+document.getElementById('totalcited').innerHTML=128;
+</script>
+
+
+<div style="width:578px; height:24px; border:#7f9db9 1px solid;padding:0;margin:20px 0 0 0; text-align:left; border-radius: 12px;" id="pages">
+<table width="578" height="24" cellspacing="1" cellpadding="3" border="0">
+<tbody><tr class="menurb" valign="middle" align="center">
+<td width="15%" nowrap=""><a href="javascript:goto_page(1)">В&nbsp;начало</a></td>
+<td class="mouse-hovergr" width="10%" nowrap=""><a title="Предыдущая страница" href="javascript:goto_page(2)">&lt;&lt;</a></td>
+
+<td class="mouse-hovergr" width="5%" nowrap="" bgcolor="#f5f5f5"><a href="javascript:goto_page(1)">1</a></td>
+
+<td class="mouse-hovergr" width="5%" nowrap="" bgcolor="#f5f5f5"><a href="javascript:goto_page(2)">2</a></td>
+
+<td class="mouse-hovergr" width="5%" nowrap="" bgcolor="#e8e8e8"><font color="#F26C4F">3</font></td>
+
+<td class="mouse-hovergr" width="5%" nowrap="" bgcolor="#f5f5f5"><a href="javascript:goto_page(4)">4</a></td>
+
+<td class="mouse-hovergr" width="5%" nowrap="" bgcolor="#f5f5f5"><a href="javascript:goto_page(5)">5</a></td>
+
+<td class="mouse-hovergr" width="5%" nowrap="" bgcolor="#f5f5f5"><a href="javascript:goto_page(6)">6</a></td>
+
+<td width="20%" nowrap=""></td>
+
+<td class="mouse-hovergr" width="10%" nowrap=""><a title="Следующая страница" href="javascript:goto_page(4)">&gt;&gt;</a></td>
+<td width="15%" nowrap=""><a href="javascript:goto_page(6)">В&nbsp;конец</a></td>
+</tr>
+</tbody></table>
+</div>
+
+<br>
+</td></tr></tbody></table>
+
+</td>
+<td valign="top" align="right">
+
+<div id="panel_default" style="position: relative; width: 200px; height:0; margin: 0; border: 1px; padding: 0"></div>
+<div id="panel" style="position: relative; width: 200px; margin: 0px; border: 0px none; padding: 0px; top: 0px;">
+
+<div style="width: 190px;" class="right-panel">
+
+<table width="190" cellspacing="0" cellpadding="3" border="0">
+
+<tbody><tr><td colspan="2" valign="top" align="center"><font color="#F26C4F"><b>ИНСТРУМЕНТЫ</b></font><br><img src="/pic/1pix.gif" vspace="1"><br></td></tr>
+
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:goto_page(4)"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:goto_page(4)">Следующая страница</a>
+</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:goto_page(2)"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:goto_page(2)">Предыдущая страница</a>
+</td></tr>
+<tr><td colspan="2"><img src="/pic/1pix.gif" vspace="5"><br></td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:select_all()"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:select_all()">Выделить все публикации на этой странице</a>
+</td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:deselect_all()"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:deselect_all()">Снять выделение</a>
+</td></tr>
+
+<tr><td colspan="2"><img src="/pic/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:itembox_add()"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:itembox_add()">Добавить выделенные публикации в подборку:</a></td></tr>
+
+<tr><td colspan="2" align="center"><div class="formfr"><select name="itemboxid" style="width:180px" class="input">
+
+<option value="0" selected="">Новая подборка
+</option></select></div>&nbsp;</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:itembox_add_all()"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:itembox_add_all()">Добавить все публикации автора в указанную выше подборку</a></td></tr>
+
+<tr><td colspan="2"><img src="/pic/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="cit_author_items.asp?id=679517"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="cit_author_items.asp?id=679517">Вывести список публикаций, ссылающихся на работы автора</a>
+</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:show_author_refs(679517)"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:show_author_refs(679517)">Вывести список ссылок на работы автора</a>
+</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="author_profile.asp?id=679517"><img src="/pic/stat.gif" width="12" hspace="4" height="13" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="author_profile.asp?authorid=679517">Анализ публикационной активности автора</a>
+</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:author_items_print()"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:author_items_print()">Вывести на печать список публикаций автора</a></td></tr>
+
+
+<tr><td colspan="2"><img src="/pic/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="/projects/science_index/author_tutorial.asp"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="/projects/science_index/author_tutorial.asp">Инструкция для авторов по работе в системе SCIENCE INDEX</a>
+</td></tr>
+
+
+<tr><td colspan="2"><img src="/pic/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="authors.asp"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="authors.asp">Авторский указатель</a>
+</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="querybox.asp"><img src="images/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="querybox.asp">Поиск публикаций</a>
+</td></tr>
+
+
+
+
+</tbody></table>
+</div>
+
+</div>
+
+</td></tr></tbody></table>
+</form></td></tr></tbody></table>
+
+
+<script language="JavaScript">
+
+$(function() {
+$(".help").tooltip({
+	position: "top right",
+	offset: [-15, -100],
+	effect: "fade", 
+	fadeInSpeed: 400, 
+	fadeOutSpeed: 400, 
+	delay: 400,  
+	predelay: 400,
+	opacity: 1.0
+});
+});
+</script>
+
+
+<br><br>
+<table id="footer" style="width: 1062px;" width="970" height="40" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr class="menug" valign="middle" align="center">
+<td width="15%" valign="bottom">
+
+</td>
+<td width="70%"><font color="#00008f"><span style="position: relative; top: 3px; right: 15px; color: #F26C4F;">*</span><a href="/copyright.asp">© 2000-2021 ООО НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА. Все права защищены</a></font><span style="position: relative; top: 3px; left: 15px; color: #F26C4F;">*</span></td>
+<td width="15%" valign="bottom">
+
+</td>
+</tr></tbody></table><div id="arrow">Вверх</div>
+
+<!-- Yandex.Metrika -->
+<div style="display:none;"><script type="text/javascript">
+(function(w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter171463 = new Ya.Metrika(171463);
+        } catch(e) {}
+    });
+})(window, 'yandex_metrika_callbacks');
+</script></div>
+<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script>
+<noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/171463" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-9339902-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
+</script>
+
+
+<br><br><br>
+</td></tr></tbody></table>
+</div><div id="fancybox-tmp"></div><div id="fancybox-loading"><div></div></div><div id="fancybox-overlay"></div><div id="fancybox-wrap" style="cursor: move;"><div id="fancybox-outer"><div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div><div id="fancybox-content"></div><a id="fancybox-close"></a><div id="fancybox-title"></div><a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a><a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a></div></div></body></html>
