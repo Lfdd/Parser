@@ -26,16 +26,21 @@ def publication_table_cell():
 
     return publication_table_cell
 
+@pytest.fixture
+def empty_string():
+    table_cell = BeautifulSoup("", "html.parser")
+
+    return table_cell
+
 
 def test_get_title_with_good_data(publication_table_cell):
 
     assert AuthorParser.get_title(publication_table_cell) == "МЕТИЛИРОВАНИЕ ГЕНОВ МИКРОРНК ПРИ ДЕСТАБИЛИЗАЦИИ АТЕРОСКЛЕРОТИЧЕСКОЙ БЛЯШКИ"
 
 
-def test_get_title_with_empty_string():
-    table_cell = BeautifulSoup("", "html.parser")
+def test_get_title_with_empty_string(empty_string):
 
-    assert AuthorParser.get_title(table_cell) == "-"
+    assert AuthorParser.get_title(empty_string) == "-"
 
 
 def test_get_authors_with_good_data(publication_table_cell):
@@ -43,10 +48,9 @@ def test_get_authors_with_good_data(publication_table_cell):
     assert AuthorParser.get_authors(publication_table_cell) == "Марков А.В., Кучер А.Н., Назаренко М.С., Зарубин А.А., Шарыш Д.В., Барбараш О.Л., Казанцев А.Н., Бурков Н.Н., Пузырев В.П."
 
 
-def test_get_authors_with_empty_string():
-    table_cell = BeautifulSoup("", "html.parser")
+def test_get_authors_with_empty_string(empty_string):
 
-    assert AuthorParser.get_authors(table_cell) == "-"
+    assert AuthorParser.get_authors(empty_string) == "-"
 
 
 def test_get_info_with_good_data(publication_table_cell):
@@ -54,10 +58,9 @@ def test_get_info_with_good_data(publication_table_cell):
     assert AuthorParser.get_info(publication_table_cell) == '''В сборнике: Молекулярная диагностика 2018. Сборник трудов Международной научно-практической конференции. 2018.  С. 102-103.'''
 
 
-def test_get_info_with_empty_string():
-    table_cell = BeautifulSoup("", "html.parser")
+def test_get_info_with_empty_string(empty_string):
 
-    assert AuthorParser.get_info(table_cell) == "-"
+    assert AuthorParser.get_info(empty_string) == "-"
 
 
 def test_get_link_with_good_data(publication_table_cell):
@@ -65,10 +68,9 @@ def test_get_link_with_good_data(publication_table_cell):
     assert AuthorParser.get_link(publication_table_cell) == 'https://www.elibrary.ru//item.asp?id=36558133'
 
 
-def test_get_link_with_empty_string():
-    table_cell = BeautifulSoup("", "html.parser")
+def test_get_link_with_empty_string(empty_string):
 
-    assert AuthorParser.get_link(table_cell) == "-"
+    assert AuthorParser.get_link(empty_string) == "-"
 
 
 def test_get_year_with_good_data(publication_table_cell):
