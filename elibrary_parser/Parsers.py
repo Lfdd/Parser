@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+from elibrary_parser import config
 from elibrary_parser.types import Publication
 
 
@@ -41,7 +42,7 @@ class AuthorParser:
         'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Iron/28.0.1550.1 Chrome/28.0.1550.1',
         'Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.16',
     )
-    DRIVER_PATH = "C:\\Users\\SZ\\AppData\\Local\\GEKO\\geckodriver.exe"  # TODO: generalize it
+    DRIVER_PATH = config.DRIVER_PATH
 
     def __init__(self, author_id, data_path, date_to, date_from):
 
