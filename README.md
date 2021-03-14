@@ -36,12 +36,11 @@ for author_id in author_ids:
 Вам потребуется Python 3.5 или более поздней версии. Вы можете иметь 
 несколько установленных версий, это не должно вызвать проблем.
 
-Также для корректной работы Вам подребуется установленная библиотека
-selenium и BeautifulSoup4 
+Также для корректной работы Вам подребуется установленные библиотеки.
+Для этого необходимо указать путь до requirments.txt в консоли и ввести команду.
 
 ```python
-pip install selenium
-pip install beautifulsoup4
+pip install -r /path/to/requirements.txt
 ```
 Чтобы selenium мог имитировать работу браузера необходимо
 установить [gekodriver.exe](https://github.com/mozilla/geckodriver/releases), 
