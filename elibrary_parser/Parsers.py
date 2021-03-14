@@ -6,23 +6,35 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 from elibrary_parser.types import Publication
 
 
 class AuthorParser:
-    """Takes a data from an given authors
-     and saves it as html file.
+    """Class for loading and processing publications by eLibrary authors
 
      Attributes
      ----------------------
+     driver: WebDriver
+        Firefox browser driver
+        Set by method: setup_webdriver
+
+     publications: lst
+        A list with info for each author
+        Set by method: save_publications
+
      author_id: str
         elibrary identificator
-     data_path: WindowsPath
+
+     data_path: Path
         a path where all data stored
+
      date_to, date_from: int
-        dates within which search will be processed
+        dates (including extremities) within which search will be processed
      """
     USER_AGENTS = (
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0',
@@ -45,7 +57,8 @@ class AuthorParser:
         self.setup_webdriver()
 
     def setup_webdriver(self):
-        """Settings for a selenium web driver"""
+        """Settings for a selenium web driver
+        Changes a self.driver attribute"""
 
         new_useragent = random.choice(self.USER_AGENTS)
 
@@ -74,19 +87,20 @@ class AuthorParser:
         self.driver.get(author_page_url)
         print("Done")
 
-        date_diff = int(self.date_to) - int(self.date_from)
         self.driver.find_element_by_xpath('//*[@id="hdr_years"]').click()
-        time.sleep(5)
-        while date_diff >= 0:
-            date_raw = self.date_to - date_diff
-            year = '//*[@id="year_' + str(date_raw) + '"]'
-            date_diff -= 1
+        time.sleep(20)
+
+        for i in range(self.date_from, self.date_to+1):
             try:
-                element = self.driver.find_element_by_xpath(year)
+                year = '//*[@id="year_' + str(i) + '"]'
+                element = WebDriverWait(self.driver, 1).until(EC.element_to_be_clickable((By.XPATH, year)))
                 self.driver.execute_script("arguments[0].click();", element)
-                print('Years:', date_raw)
+                print('Years:', i)
+            except TimeoutException:
+                print("Can't load the year selection")
+                print('No publications for:' + str(i) + 'year')
             except NoSuchElementException:
-                print('No publications for:' + str(date_raw) + 'year')
+                print('No publications for:' + str(i) + 'year')
 
         # Click "search by year" button
         self.driver.find_element_by_xpath('//td[6]/div').click()  # TODO: remove hardcoded index
@@ -114,12 +128,12 @@ class AuthorParser:
 
     @staticmethod
     def get_title(table_cell):
-        """Gets titles from an HTML page
-
+        """Get titles from an HTML page box
         Parameters:
         ----------------------
-        table_cell --> bs4.element.ResultSet
+        table_cell : bs4.element.ResultSet
         """
+
         title = table_cell.find_all('span', style="line-height:1.0;")
 
         if not title:
@@ -131,7 +145,7 @@ class AuthorParser:
 
     @staticmethod
     def get_authors(table_cell):
-        """Gets authors from an HTML page"""
+        """Get authors from an HTML page box"""
 
         box_of_authors = table_cell.find_all('font', color="#00008f")
         authors = box_of_authors[0].find_all('i')
@@ -144,7 +158,7 @@ class AuthorParser:
 
     @staticmethod
     def get_info(table_cell):
-        """Gets journal info from an HTML page"""
+        """Get journal info from an HTML page box"""
 
         biblio_info = list(table_cell.children)[-1]
         biblio_info = biblio_info.text.strip()
@@ -156,7 +170,7 @@ class AuthorParser:
 
     @staticmethod
     def get_link(table_cell):
-        """Gets article link from an HTML page"""
+        """Get article link from an HTML page box"""
 
         links_in_box = table_cell.find_all('a')
 
@@ -168,7 +182,7 @@ class AuthorParser:
         return paper_link
 
     def save_publications(self):
-        """Creates a way and csv file for processed data"""
+        """Save author's publications to a csv-file"""
 
         save_path = self.data_path / "processed" / self.author_id
         save_path.mkdir(exist_ok=True)
@@ -188,7 +202,7 @@ class AuthorParser:
                 wr.writerow(saving_publication)
 
     def parse_publications(self):
-        """ Gets trough the html file and saves information from it"""
+        """ Get trough the html file and save information from it"""
 
         print("Parsing publications for author", self.author_id)
 

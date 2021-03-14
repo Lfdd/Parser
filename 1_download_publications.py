@@ -3,7 +3,6 @@ from elibrary_parser.utils import find_common_publications
 
 author_ids = [
     "679517",  # Марков
-    "108193",  # Пузырёв
 ]
 
 # "108193",  # Пузырёв
@@ -15,13 +14,13 @@ for author_id in author_ids:
     parser = AuthorParser(
         author_id=author_id,
         data_path="C:/Users/SZ/PycharmProjects/Parser/data/",
-        date_from=2016,
+        date_from=2000,
         date_to=2017
     )
     # help(AuthorParser)
     parser.find_publications()
-    parser.parse_publications()
-    parser.save_publications()
+    #parser.parse_publications()
+    #parser.save_publications()
 
     publications.append(set(parser.publications))
 

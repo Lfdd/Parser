@@ -2,7 +2,7 @@ import re
 
 
 class Publication:
-    """ Gets rid of unnecessary and
+    """ Storing information about publications
     Finds similarities between given authors
 
      Attributes
@@ -17,7 +17,7 @@ class Publication:
         link for the publication
     """
 
-    def __init__(self, title, authors, info, link):
+    def __init__(self, title: str, authors: str, info: str, link: str):
         self.title = title
         self.authors = authors
         self.info = info
@@ -25,21 +25,22 @@ class Publication:
         self.year = None
 
     def to_csv_row(self):
-        """ Creates a row with semicolons between an elements """
+        """ Create a table row with semicolons between the elements """
 
         return self.title + ';' + self.authors + ';' + self.info + ';' + self.link + ';' + self.year
 
     def get_year(self):
         """ Gets a year in the range from 1900 to 2100 """
 
-        years = re.findall(r'20\d{2}.|19\d{2}.', self.info)
+        years = re.findall(r'20\d{2}|19\d{2}', self.info)
         if years:
             self.year = years[0]
         else:
             self.year = "-"
 
     def __eq__(self, other):
-        """ Gets out any similar authors publications
+        """ Gets out any similar authors publications if their
+        authors, title, info, link and year are equal
 
         Parameters:
         ----------------------
@@ -56,6 +57,6 @@ class Publication:
         )
 
     def __hash__(self):
-        """ Checks if the hashsum is equal"""
+        """ Hashses a publication"""
 
         return hash(self.title) ^ hash(self.authors) ^ hash(self.info) ^ hash(self.link) ^ hash(self.year)
