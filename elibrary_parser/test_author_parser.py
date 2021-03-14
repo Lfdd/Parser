@@ -90,7 +90,7 @@ def test_get_year_with_info_without_year():
     publication = Publication(title='', authors='', info=info, link='')
     publication.get_year()
 
-    assert publication.year == '-'
+    assert publication.year == Publication.missing_value
 
 
 def test_same_publication():

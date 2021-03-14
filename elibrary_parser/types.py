@@ -8,6 +8,7 @@ class Publication:
         self.info = info
         self.link = link
         self.year = None
+    missing_value = '-'
 
     def to_csv_row(self):
         return self.title + ';' + self.authors + ';' + self.info + ';' + self.link + ';' + self.year
@@ -17,7 +18,7 @@ class Publication:
         if years:
             self.year = years[0]
         else:
-            self.year = "-"
+            self.year = Publication.missing_value
 
     def __eq__(self, other):
         return (
