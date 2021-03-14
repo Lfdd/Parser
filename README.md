@@ -42,7 +42,7 @@ for author_id in author_ids:
 ```python
 pip install -r /path/to/requirements.txt
 ```
-Чтобы selenium мог имитировать работу браузера необходимо
+Чтобы библиотека selenium могла имитировать работу браузера необходимо
 установить [gekodriver.exe](https://github.com/mozilla/geckodriver/releases), 
-затем указать в /elibrary_parser/config.py путь до gekodriver.exe на вашем 
+затем указать в /elibrary_parser/config.py путь до gekodriver.exe на Вашем 
 компьютере.
