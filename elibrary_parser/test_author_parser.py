@@ -42,7 +42,7 @@ def test_get_title_with_good_data(publication_table_cell):
 
 def test_get_title_with_empty_string(empty_string):
 
-    assert AuthorParser.get_title(empty_string) == AuthorParser.missing_value()
+    assert AuthorParser.get_title(empty_string) == AuthorParser.missing_value
 
 
 def test_get_authors_with_good_data(publication_table_cell):
@@ -52,7 +52,7 @@ def test_get_authors_with_good_data(publication_table_cell):
 
 def test_get_authors_with_empty_string(empty_string):
 
-    assert AuthorParser.get_authors(empty_string) == AuthorParser.missing_value()
+    assert AuthorParser.get_authors(empty_string) == AuthorParser.missing_value
 
 
 def test_get_info_with_good_data(publication_table_cell):
@@ -63,7 +63,7 @@ def test_get_info_with_good_data(publication_table_cell):
 
 def test_get_info_with_empty_string(empty_string):
 
-    assert AuthorParser.get_info(empty_string) == AuthorParser.missing_value()
+    assert AuthorParser.get_info(empty_string) == AuthorParser.missing_value
 
 
 def test_get_link_with_good_data(publication_table_cell):
@@ -73,7 +73,7 @@ def test_get_link_with_good_data(publication_table_cell):
 
 def test_get_link_with_empty_string(empty_string):
 
-    assert AuthorParser.get_link(empty_string) == AuthorParser.missing_value()
+    assert AuthorParser.get_link(empty_string) == AuthorParser.missing_value
 
 
 def test_get_year_with_good_data(publication_table_cell):
