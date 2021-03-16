@@ -128,8 +128,9 @@ class AuthorParser:
             time.sleep(sleep_seconds)
 
     @staticmethod
-    def get_title(table_cell):
-        """Get titles from an HTML page box
+    def get_title(table_cell: bs4.element.ResultSet) -> str:
+        """Get publication titles from an HTML page box
+        
         Parameters:
         ----------------------
         table_cell : bs4.element.ResultSet
@@ -145,7 +146,7 @@ class AuthorParser:
         return title
 
     @staticmethod
-    def get_authors(table_cell):
+    def get_authors(table_cell: bs4.element.ResultSet) -> str:
         """Get authors from an HTML page box"""
 
         box_of_authors = table_cell.find_all('font', color="#00008f")
