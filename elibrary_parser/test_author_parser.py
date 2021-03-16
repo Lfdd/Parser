@@ -93,35 +93,35 @@ def test_get_year_with_info_without_year():
     assert publication.year == Publication.missing_value
 
 
-def test_same_publication():
+def test_comparing_same_publication():
     publication_1 = Publication(title="same_title", authors="same_authors", info="same_info", link="same_link")
     publication_2 = Publication(title="same_title", authors="same_authors", info="same_info", link="same_link")
 
     assert publication_1 == publication_2
 
 
-def test_publication_with_different_title():
+def test_comparing_publication_with_different_title():
     publication_1 = Publication(title="same_title", authors="same_authors", info="same_info", link="same_link")
     publication_2 = Publication(title="different_title", authors="same_authors", info="same_info", link="same_link")
 
     assert publication_1 != publication_2
 
 
-def test_publication_with_different_authors():
+def test_comparing_publication_with_different_authors():
     publication_1 = Publication(title="same_title", authors="same_authors", info="same_info", link="same_link")
     publication_2 = Publication(title="same_title", authors="different_authors", info="same_info", link="same_link")
 
     assert publication_1 != publication_2
 
 
-def test_publication_with_different_info():
+def test_comparing_publication_with_different_info():
     publication_1 = Publication(title="same_title", authors="same_authors", info="same_info", link="same_link")
     publication_2 = Publication(title="same_title", authors="same_authors", info="different_info", link="same_link")
 
     assert publication_1 != publication_2
 
 
-def test_publication_with_different_link():
+def test_comparing_publication_with_different_link():
     publication_1 = Publication(title="same_title", authors="same_authors", info="same_info", link="same_link")
     publication_2 = Publication(title="same_title", authors="same_authors", info="same_info", link="different_link")
 
