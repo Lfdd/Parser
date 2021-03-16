@@ -158,7 +158,7 @@ class AuthorParser:
         return authors
 
     @staticmethod
-    def get_info(table_cell):
+    def get_info(table_cell: bs4.element.ResultSet) -> str:
         """Get journal info from an HTML page box"""
 
         biblio_info = list(table_cell.children)[-1]
@@ -170,7 +170,7 @@ class AuthorParser:
         return biblio_info
 
     @staticmethod
-    def get_link(table_cell):
+    def get_link(table_cell: bs4.element.ResultSet) -> str:
         """Get article link from an HTML page box"""
 
         links_in_box = table_cell.find_all('a')

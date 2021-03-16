@@ -38,13 +38,13 @@ class Publication:
         else:
             self.year = "-"
 
-    def __eq__(self, other):
+    def __eq__(self, other: Publication) -> bool:
         """ Gets out any similar authors publications if their
         authors, title, info, link and year are equal
 
         Parameters:
         ----------------------
-        other --> str
+        other : Publication
             other info to compare with
         """
 
@@ -57,6 +57,6 @@ class Publication:
         )
 
     def __hash__(self):
-        """ Hashses a publication"""
+        """ Hashes a publication"""
 
         return hash(self.title) ^ hash(self.authors) ^ hash(self.info) ^ hash(self.link) ^ hash(self.year)
