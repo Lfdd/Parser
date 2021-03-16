@@ -19,7 +19,7 @@ class AuthorParser:
     """Class for loading and processing publications by eLibrary authors
 
      Attributes
-     ----------------------
+     -----------
      driver: WebDriver
         Firefox browser driver
         Set by method: setup_webdriver
@@ -132,7 +132,7 @@ class AuthorParser:
         """Get publication titles from an HTML page box
         
         Parameters:
-        ----------------------
+        -----------
         table_cell : bs4.element.ResultSet
         """
 
