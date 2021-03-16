@@ -6,7 +6,7 @@ class Publication:
     Finds similarities between given authors
 
      Attributes
-     ----------------------
+     ----------
      title: str
         publication title
      authors: str
@@ -43,7 +43,7 @@ class Publication:
         authors, title, info, link and year are equal
 
         Parameters:
-        ----------------------
+        -----------
         other : Publication
             other info to compare with
         """
