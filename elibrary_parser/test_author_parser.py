@@ -147,13 +147,6 @@ def test_for_find_common_publication():
     publications = [set(publications_1), set(publications_2)]
     common_publication = find_common_publications(publications)
 
-    for publications in common_publication:
-        title = publications.title
-        authors = publications.authors
-        info = publications.info
-        link = publications.link
+    number_of_common_publication = len(common_publication)
 
-    assert title == 'same_title'
-    assert authors == 'same_authors'
-    assert info == 'same_info'
-    assert link == 'same_link'
+    assert number_of_common_publication == 1
