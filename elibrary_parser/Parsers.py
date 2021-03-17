@@ -2,6 +2,7 @@ import csv
 from pathlib import Path
 import random
 import time
+import bs4
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -57,6 +58,8 @@ class AuthorParser:
         self.create_files_dir()
         self.setup_webdriver()
 
+    missing_value = '-'
+
     def setup_webdriver(self):
         """Settings for a selenium web driver
         Changes a self.driver attribute"""
@@ -72,6 +75,12 @@ class AuthorParser:
 
     def create_files_dir(self):
         """Creates directory for the web-pages of an specific author"""
+        raw_data_dir = self.data_path / "raw"
+        raw_data_dir.mkdir(exist_ok=True)
+
+        processed_data_dir = self.data_path / "processed"
+        processed_data_dir.mkdir(exist_ok=True)
+
         self.files_dir = self.data_path / "raw" / self.author_id
 
         print("Author's directory:", self.files_dir.absolute())
@@ -127,10 +136,11 @@ class AuthorParser:
 
             time.sleep(sleep_seconds)
 
+
     @staticmethod
     def get_title(table_cell: bs4.element.ResultSet) -> str:
         """Get publication titles from an HTML page box
-        
+
         Parameters:
         -----------
         table_cell : bs4.element.ResultSet
@@ -139,7 +149,7 @@ class AuthorParser:
         title = table_cell.find_all('span', style="line-height:1.0;")
 
         if not title:
-            title = "-"
+            title = AuthorParser.missing_value
         else:
             title = title[0].text
 
@@ -150,11 +160,14 @@ class AuthorParser:
         """Get authors from an HTML page box"""
 
         box_of_authors = table_cell.find_all('font', color="#00008f")
-        authors = box_of_authors[0].find_all('i')
-        if not authors:
-            authors = '-'
+        if not box_of_authors:
+            authors = AuthorParser.missing_value
         else:
-            authors = authors[0].text
+            authors = box_of_authors[0].find_all('i')
+            if not authors:
+                authors = AuthorParser.missing_value
+            else:
+                authors = authors[0].text
 
         return authors
 
@@ -162,11 +175,14 @@ class AuthorParser:
     def get_info(table_cell: bs4.element.ResultSet) -> str:
         """Get journal info from an HTML page box"""
 
-        biblio_info = list(table_cell.children)[-1]
-        biblio_info = biblio_info.text.strip()
-        biblio_info = biblio_info.replace('\xa0', ' ')
-        biblio_info = biblio_info.replace('\r\n', ' ')
-        biblio_info = biblio_info.replace('\n', ' ')
+        if len(table_cell) == 0:
+            biblio_info = AuthorParser.missing_value
+        else:
+            biblio_info = list(table_cell.children)[-1]
+            biblio_info = biblio_info.text.strip()
+            biblio_info = biblio_info.replace('\xa0', ' ')
+            biblio_info = biblio_info.replace('\r\n', ' ')
+            biblio_info = biblio_info.replace('\n', ' ')
 
         return biblio_info
 
@@ -174,14 +190,27 @@ class AuthorParser:
     def get_link(table_cell: bs4.element.ResultSet) -> str:
         """Get article link from an HTML page box"""
 
-        links_in_box = table_cell.find_all('a')
-
-        links = []
-        for link in links_in_box:
-            links.append(link.get('href'))
-        paper_link = 'https://www.elibrary.ru/' + links[0]  # TODO: check if it's always a paper link
+        information_wint_links_in_box = table_cell.find_all('a')
+        if not information_wint_links_in_box:
+            paper_link = AuthorParser.missing_value
+        else:
+            title_information_with_link = information_wint_links_in_box[0]
+            link = title_information_with_link.get('href')
+            paper_link = 'https://www.elibrary.ru/' + link  # TODO: check if it's always a paper link
 
         return paper_link
+
+    @staticmethod
+    def create_table_cells(soup):
+        publications_table = soup.find_all('table', id="restab")[0]
+
+        rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
+        for box in rubbish:
+            box.decompose()  # Remove all inner tags
+
+        table_cells = publications_table.find_all('td', align="left", valign="top")
+
+        return table_cells
 
     def save_publications(self):
         """Save author's publications to a csv-file"""
@@ -215,13 +244,8 @@ class AuthorParser:
                 page_text = f.read()
 
             soup = BeautifulSoup(page_text, "html.parser")
-            publications_table = soup.find_all('table', id="restab")[0]
 
-            rubbish = publications_table.find_all('table', width="100%", cellspacing="0")
-            for box in rubbish:
-                box.decompose()  # Remove all inner tags
-
-            table_cells = publications_table.find_all('td', align="left", valign="top")
+            table_cells = self.create_table_cells(soup)
 
             print("LENGTH OF INFO", len(table_cells))
 

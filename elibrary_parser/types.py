@@ -23,6 +23,7 @@ class Publication:
         self.info = info
         self.link = link
         self.year = None
+    missing_value = '-'
 
     def to_csv_row(self):
         """ Create a table row with semicolons between the elements """
@@ -36,9 +37,9 @@ class Publication:
         if years:
             self.year = years[0]
         else:
-            self.year = "-"
+            self.year = Publication.missing_value
 
-    def __eq__(self, other: Publication) -> bool:
+    def __eq__(self, other) -> bool:
         """ Gets out any similar authors publications if their
         authors, title, info, link and year are equal
 
