@@ -11,7 +11,7 @@
 а также ссылку на страницу публикации (link). 
 Затем загружает HTML-страницы с публикациями автора в /data/raw/(author_id), 
 извлекает информацию и сохраняет её в табличном формате в файл формата csv в папке 
-/data/processed/(author_id), а также находить общие публикации коллектива авторов.
+/data/processed/(author_id), а также находит общие публикации коллектива авторов.
 
 Пример работы с программой:
 
@@ -19,13 +19,25 @@
 from elibrary_parser.Parsers import AuthorParser
 from elibrary_parser.utils import find_common_publications
 
-author_ids = ["679517","108193","638022"]
+author_ids = ["1","2","3"]
 for author_id in author_ids:
     parser = AuthorParser(
         author_id=author_id,
         data_path="C://Parser/data/",
-        date_from=2016, 
-        date_to=2017 
+        date_from=1984, 
+        date_to=2021 
+
+parser.find_publications()
+parser.parse_publications()
+parser.save_publications()
+
+publications.append(set(parser.publications))
+
+common_publications = find_common_publications(publications)
+for publication in common_publications: #Выводит название и авторов общих публикаций
+    print(publication.title)
+    print(publication.authors)
+    print("-"*20) 
     )
 
 ```
@@ -42,7 +54,7 @@ for author_id in author_ids:
 ```python
 pip install -r /path/to/requirements.txt
 ```
-Чтобы библиотека selenium могла имитировать работу браузера необходимо
-установить [gekodriver.exe](https://github.com/mozilla/geckodriver/releases), 
+Чтобы библиотека selenium могла имитировать работу браузера необходимо иметь предустановленным
+браузер [Firefox](https://www.mozilla.org/en-US/firefox/new/), а также [gekodriver.exe](https://github.com/mozilla/geckodriver/releases), 
 затем указать в /elibrary_parser/config.py путь до gekodriver.exe на Вашем 
 компьютере.
