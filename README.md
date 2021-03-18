@@ -37,9 +37,7 @@ common_publications = find_common_publications(publications)
 for publication in common_publications: #Выводит название и авторов общих публикаций
     print(publication.title)
     print(publication.authors)
-    print("-"*20) 
     )
-
 ```
 
 Установка
