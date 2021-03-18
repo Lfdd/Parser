@@ -39,6 +39,7 @@ for author_id in author_ids:
 
 # Поиск общих публикаций коллектива авторов
 common_publications = find_common_publications(publications)
+print("Found", len(common_publications), "common publications")
 
 # Вывод названия и авторов общих публикаций
 for publication in common_publications:
