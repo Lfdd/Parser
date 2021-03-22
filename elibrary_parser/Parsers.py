@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 from elibrary_parser import config
-from elibrary_parser.types import Publication
+from elibrary_parser.publicationwrk import Publication
 
 
 class AuthorParser:
