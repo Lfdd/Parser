@@ -188,7 +188,9 @@ class AuthorParser:
         save_path = self.data_path / "processed" / self.author_id
         save_path.mkdir(exist_ok=True)
 
-        csv_path = save_path / "publications.csv"
+        authors_ids_csv = str(self.author_id) + "_publications.csv"
+
+        csv_path = save_path / authors_ids_csv
 
         with open(csv_path, 'a', encoding="utf8", newline='') as csvfile:
             wr = csv.writer(csvfile, delimiter=';')
@@ -236,3 +238,5 @@ class AuthorParser:
                 publication.get_year()
 
                 self.publications.append(publication)
+
+

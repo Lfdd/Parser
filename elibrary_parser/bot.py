@@ -1,6 +1,7 @@
 import logging
 import os
 
+
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -8,7 +9,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils import executor
 from elibrary_parser.Parsers import AuthorParser
-from elibrary_parser.utils import find_common_publications
+from elibrary_parser.utils import save_common_publications
 
 logging.basicConfig(level=logging.INFO)
 
@@ -32,60 +33,76 @@ async def start(message: types.Message):
     await Form.authors_ids.set()
     await message.reply("Данный бот находит общие статьи между авторами на сайте elibrary."
                         "Id автора это последние цифры вида: authorid=*******. "
-                        "Просто начните вводить id требуемых автора.")
+                        "Просто начните вводить id требуемых авторов через пробел.")
 
 
 def get_keyboard():
     buttons = [
-        types.InlineKeyboardButton(text="Добавить авторов", callback_data="keyboard1_extra"),
-        types.InlineKeyboardButton(text="Задать промежуток", callback_data="keyboard1_Interval"),
+        types.InlineKeyboardButton(text="Изменить список авторов", callback_data="keyboard1_extra"),
+        types.InlineKeyboardButton(text="Задать временной промежуток", callback_data="keyboard1_interval"),
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
     return keyboard
 
 
-@dp.message_handler(lambda message: message.text.isdigit(), state=Form.authors_ids)
+def consists_of_integers(message: types.Message):
+    for i in message.text.split():
+        try:
+            if int(i) and int(i) > 0:
+                continue
+            else:
+                return False
+        except ValueError:
+            return False
+    return True
+
+
+def is_date(message: types.Message):
+    try:
+        if len(message.text) == 4 and int(message.text) and int(message.text) > 1900:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+
+
+@dp.message_handler(consists_of_integers, state=Form.authors_ids)
 async def authors_ids_dict(message: types.Message, state: FSMContext):
     await Form.next()
+    print(message.text.split())
     async with state.proxy() as data:
-        data['authors_ids'] = {message.text: 'first_author'}
+        data['authors_ids'] = (message.text.split())
     await message.answer(f"Что вы хотите сделать?", reply_markup=get_keyboard())
 
 
 @dp.callback_query_handler(Text(startswith='keyboard1_'))
-async def callbacks(call: types.CallbackQuery, state: FSMContext):
+async def callbacks(call: types.CallbackQuery):
     action = call.data.split("_")[1]
     if action == "extra":
-        await call.message.edit_text(f'Хорошо, добавим еще')
-        await Form.next()
-    elif action == "Interval":
-        await call.message.edit_text(f'Укажите промежуток от...')
+        await call.message.edit_text(f'Хорошо, введите новые id авторов через пробел')
+        await Form.authors_ids.set()
+    elif action == "interval":
+        await call.message.edit_text(f'Укажите годы (первое значение) от...')
         await Form.date_from.set()
-
     await call.answer()
 
 
-@dp.message_handler(lambda message: message.text.isdigit(), state=Form.authors_ids)
-async def authors_ids_dict(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['authors_ids']['second_author'] = message.text
-    await message.answer(f"Что вы хотите сделать?", reply_markup=get_keyboard())
-
-
-@dp.message_handler(lambda message: message.text.isdigit(), state=Form.date_from)
+@dp.message_handler(is_date, state=Form.date_from)
 async def process_date_from(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['date_from'] = message.text
-    await message.reply("...И до какого года")
+    await message.reply("...И до какого года (крайнее значение)")
     await Form.date_to.set()
 
 
-@dp.message_handler(lambda message: message.text.isdigit(), state=Form.date_to)
+@dp.message_handler(is_date, state=Form.date_to)
 async def process_date_to(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['date_to'] = message.text
         for data['authors_ids'] in data['authors_ids']:
+            print(len(data['authors_ids']))
             parser = AuthorParser(
                 author_id=data['authors_ids'],
                 data_path="C://Users//SZ//PycharmProjects//Parser//data",
@@ -97,19 +114,38 @@ async def process_date_to(message: types.Message, state: FSMContext):
             parser.save_publications()  # Сохранение информации в CSV-файл
 
             path = r"C:/Users/SZ/PycharmProjects/Parser/data/processed/" + \
-                (data['authors_ids']) + r'/publications.csv'
+                (data['authors_ids']) + '/' + (data['authors_ids']) + r'_publications.csv'
 
             await bot.send_document(message.chat.id, open(path, 'rb'))
 
 
-@dp.message_handler(lambda message: not message.text.isdigit(), state=Form.date_from)
+        # if len(str(data['authors_ids'])) > 1:
+        #
+        #     path_common = r"C:/Users/SZ/PycharmProjects/Parser/data/common_publications/" + \
+        #         (data['date_from']) + '-' + (data['date_to']) + r'_publications.csv'
+        #
+        #     data_path = "C://Users//SZ//PycharmProjects//Parser//data"
+        #     publications = [set(parser.publications)]
+        #     save_common_publications(data_path=data_path, date_from=int(data['date_from']),
+        #                              date_to=int(data['date_to']), publications=publications)
+        #
+        #     await bot.send_document(message.chat.id, open(path_common, 'rb'))
+        #     await message.answer("Общие")
+
+
+@dp.message_handler(lambda message: not consists_of_integers(message), state=Form.authors_ids)
+async def process_authors_id_invalid(message: types.Message):
+    return await message.reply('Пожалуйста вводите только положительные целые числа')
+
+
+@dp.message_handler(lambda message: not is_date(message), state=Form.date_from)
 async def process_date_from_invalid(message: types.Message):
-    return await message.reply('Пожалуйста вводите только числа')
+    return await message.reply('Пожалуйста вводите только даты формата (2020)')
 
 
-@dp.message_handler(lambda message: not message.text.isdigit(), state=Form.date_to)
+@dp.message_handler(lambda message: not is_date(message), state=Form.date_to)
 async def process_date_to_invalid(message: types.Message):
-    return await message.reply('Пожалуйста вводите только числа')
+    return await message.reply('Пожалуйста вводите только даты формата (2020)')
 
 
 if __name__ == '__main__':
