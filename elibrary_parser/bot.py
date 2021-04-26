@@ -33,7 +33,8 @@ async def start(message: types.Message):
     await Form.authors_ids.set()
     await message.reply("Данный бот находит общие статьи между авторами на сайте elibrary."
                         "Id автора это последние цифры вида: authorid=*******. "
-                        "Просто начните вводить id требуемых авторов через пробел.")
+                        "Просто начните вводить id требуемых авторов через пробел."
+                        "Если что-то не так, вы всегда можете написать /restart и начать заново.")
 
 
 def get_keyboard():
@@ -118,19 +119,22 @@ async def process_date_to(message: types.Message, state: FSMContext):
 
             await bot.send_document(message.chat.id, open(path, 'rb'))
 
+        if len((data['authors_ids']).split()) > 1:
+            await message.reply("Ухх, я запустился! А должен был?")
 
-        # if len(str(data['authors_ids'])) > 1:
-        #
-        #     path_common = r"C:/Users/SZ/PycharmProjects/Parser/data/common_publications/" + \
-        #         (data['date_from']) + '-' + (data['date_to']) + r'_publications.csv'
-        #
-        #     data_path = "C://Users//SZ//PycharmProjects//Parser//data"
-        #     publications = [set(parser.publications)]
-        #     save_common_publications(data_path=data_path, date_from=int(data['date_from']),
-        #                              date_to=int(data['date_to']), publications=publications)
-        #
-        #     await bot.send_document(message.chat.id, open(path_common, 'rb'))
-        #     await message.answer("Общие")
+            path_common = r"C:/Users/SZ/PycharmProjects/Parser/data/common_publications/" + \
+                (data['date_from']) + '-' + (data['date_to']) + r'_publications.csv'
+
+            data_path = "C://Users//SZ//PycharmProjects//Parser//data"
+            publications = [set(parser.publications)]
+            save_common_publications(data_path=data_path, date_from=int(data['date_from']),
+                                     date_to=int(data['date_to']), publications=publications)
+
+            await bot.send_document(message.chat.id, open(path_common, 'rb'))
+            await message.answer("Общие")
+        else:
+            await message.answer(f'Спасибо, что воспользовались нашим ботом!')
+
 
 
 @dp.message_handler(lambda message: not consists_of_integers(message), state=Form.authors_ids)
