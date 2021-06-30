@@ -124,7 +124,7 @@ class AuthorParser:
 
             print("Downloading page number", page_number)
             page_number += 1
-            
+
             try:
                 self.driver.find_element_by_link_text('Следующая страница').click()
             except NoSuchElementException:
@@ -136,6 +136,32 @@ class AuthorParser:
 
             time.sleep(sleep_seconds)
 
+    def download_page_of_publications(self):
+        """Gets the web-page of the author's publications"""
+        page_number = 1
+
+        for publication in self.publications:
+            link_of_page = publication.link
+            print('getting publication page')
+            self.driver.get(link_of_page)
+            print('Done')
+
+            page_id = link_of_page.split('=')
+            page_id = page_id[1]
+
+            publication_data_dir = self.files_dir/'publications'
+            publication_data_dir.mkdir(exist_ok=True)
+
+            with open(publication_data_dir/f'{page_id}.html', 'a', encoding='utf-8') as f:
+                f.write(self.driver.page_source)
+
+            print("Downloading page number", page_number)
+            page_number += 1
+
+            sleep_seconds = random.randint(5, 15)
+            print("Sleeping for", sleep_seconds, "seconds")
+
+            time.sleep(sleep_seconds)
 
     @staticmethod
     def get_title(table_cell: bs4.element.ResultSet) -> str:
