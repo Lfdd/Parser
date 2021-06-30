@@ -52,19 +52,14 @@ def consists_of_integers(message: types.Message):
         try:
             if int(i) and int(i) > 0:
                 continue
-            else:
-                return False
         except ValueError:
             return False
-    return True
 
 
-def is_date(message: types.Message):
+def is_date_correct(message: types.Message):
     try:
         if len(message.text) == 4 and int(message.text) and int(message.text) > 1900:
-            return True
-        else:
-            return False
+            continue
     except ValueError:
         return False
 
@@ -73,40 +68,49 @@ def is_date(message: types.Message):
 async def authors_ids_dict(message: types.Message, state: FSMContext):
     await Form.next()
     print(message.text.split())
+    
     async with state.proxy() as data:
         data['authors_ids'] = (message.text.split())
-    await message.answer(f"Что вы хотите сделать?", reply_markup=get_keyboard())
+        
+    await message.answer("Что вы хотите сделать?", reply_markup=get_keyboard())
 
 
 @dp.callback_query_handler(Text(startswith='keyboard1_'))
 async def callbacks(call: types.CallbackQuery):
     action = call.data.split("_")[1]
+    
     if action == "extra":
-        await call.message.edit_text(f'Хорошо, введите новые id авторов через пробел')
+        await call.message.edit_text('Хорошо, введите новые id авторов через пробел')
         await Form.authors_ids.set()
+        
     elif action == "interval":
-        await call.message.edit_text(f'Укажите годы (первое значение) от...')
+        await call.message.edit_text('Укажите годы (первое значение) от...')
         await Form.date_from.set()
+        
     await call.answer()
 
 
 @dp.message_handler(is_date, state=Form.date_from)
 async def process_date_from(message: types.Message, state: FSMContext):
+    
     async with state.proxy() as data:
         data['date_from'] = message.text
+        
     await message.reply("...И до какого года (крайнее значение)")
     await Form.date_to.set()
 
 
 @dp.message_handler(is_date, state=Form.date_to)
 async def process_date_to(message: types.Message, state: FSMContext):
+    
     async with state.proxy() as data:
         data['date_to'] = message.text
+        
         for data['authors_ids'] in data['authors_ids']:
             print(len(data['authors_ids']))
             parser = AuthorParser(
                 author_id=data['authors_ids'],
-                data_path="C://Users//SZ//PycharmProjects//Parser//data",
+                data_path="PycharmProjects//Parser//data",
                 date_from=int(data['date_from']),
                 date_to=int(data['date_to'])
             )
@@ -114,18 +118,18 @@ async def process_date_to(message: types.Message, state: FSMContext):
             parser.parse_publications()  # Извлечение информации из HTML-файлов
             parser.save_publications()  # Сохранение информации в CSV-файл
 
-            path = r"C:/Users/SZ/PycharmProjects/Parser/data/processed/" + \
+            path = r"PycharmProjects/Parser/data/processed/" + \
                 (data['authors_ids']) + '/' + (data['authors_ids']) + r'_publications.csv'
 
             await bot.send_document(message.chat.id, open(path, 'rb'))
 
         if len((data['authors_ids']).split()) > 1:
-            await message.reply("Ухх, я запустился! А должен был?")
+            #await message.reply("Ухх, я запустился! А должен был?")
 
-            path_common = r"C:/Users/SZ/PycharmProjects/Parser/data/common_publications/" + \
+            path_common = r"/Parser/data/common_publications/" + \
                 (data['date_from']) + '-' + (data['date_to']) + r'_publications.csv'
 
-            data_path = "C://Users//SZ//PycharmProjects//Parser//data"
+            data_path = "PycharmProjects//Parser//data"
             publications = [set(parser.publications)]
             save_common_publications(data_path=data_path, date_from=int(data['date_from']),
                                      date_to=int(data['date_to']), publications=publications)
@@ -133,7 +137,7 @@ async def process_date_to(message: types.Message, state: FSMContext):
             await bot.send_document(message.chat.id, open(path_common, 'rb'))
             await message.answer("Общие")
         else:
-            await message.answer(f'Спасибо, что воспользовались нашим ботом!')
+            await message.answer('Спасибо, что воспользовались нашим ботом!')
 
 
 
