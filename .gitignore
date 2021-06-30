@@ -141,3 +141,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+elibrary_parser/geckodriver.exe
+elibrary_parser/project.py
