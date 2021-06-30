@@ -121,7 +121,8 @@ async def process_date_to(message: types.Message, state: FSMContext):
             path = r"PycharmProjects/Parser/data/processed/" + \
                 (data['authors_ids']) + '/' + (data['authors_ids']) + r'_publications.csv'
 
-            await bot.send_document(message.chat.id, open(path, 'rb'))
+            with open(path, "rb") as f:
+                await bot.send_document(message.chat.id, f)
 
         if len((data['authors_ids']).split()) > 1:
             #await message.reply("Ухх, я запустился! А должен был?")
@@ -133,8 +134,10 @@ async def process_date_to(message: types.Message, state: FSMContext):
             publications = [set(parser.publications)]
             save_common_publications(data_path=data_path, date_from=int(data['date_from']),
                                      date_to=int(data['date_to']), publications=publications)
-
-            await bot.send_document(message.chat.id, open(path_common, 'rb'))
+            
+            with open(path, "rb") as f:
+                await bot.send_document(message.chat.id, f)
+            
             await message.answer("Общие")
         else:
             await message.answer('Спасибо, что воспользовались нашим ботом!')
