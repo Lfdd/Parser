@@ -144,3 +144,4 @@ cython_debug/
 
 elibrary_parser/geckodriver.exe
 elibrary_parser/project.py
+elibrary_parser/secrets.py
