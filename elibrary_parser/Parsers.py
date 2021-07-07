@@ -11,9 +11,11 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from elibrary_parser import config
 from elibrary_parser.types import Publication
+from elibrary_parser.secrets import Secrets
 
 
 class AuthorParser:
@@ -69,7 +71,7 @@ class AuthorParser:
         profile = webdriver.FirefoxProfile()
         profile.set_preference("general.useragent.override", new_useragent)
         options = Options()
-        options.headless = True
+        options.headless = False
 
         self.driver = webdriver.Firefox(profile, executable_path=self.DRIVER_PATH, options=options)
 
@@ -96,6 +98,17 @@ class AuthorParser:
         print("Getting author's page")
         self.driver.get(author_page_url)
         print("Done")
+
+        login = self.driver.find_element_by_id('login')
+        login.send_keys(Secrets.elib_login)
+        time.sleep(10)
+
+        password = self.driver.find_element_by_id('password')
+        password.send_keys(Secrets.elib_password)
+        password.send_keys(Keys.RETURN)
+        time.sleep(10)
+
+        self.driver.get(author_page_url)
 
         self.driver.find_element_by_xpath('//*[@id="hdr_years"]').click()
         time.sleep(20)
