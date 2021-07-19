@@ -40,11 +40,13 @@ class AuthorParser:
      date_to, date_from: int
         dates (including extremities) within which search will be processed
      """
-    USER_AGENTS = (
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0',
-        'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Iron/28.0.1550.1 Chrome/28.0.1550.1',
-        'Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.16',
-    )
+    USER_AGENTs_list = []
+    with open('../user_agent.txt', 'r', encoding='UTF-8') as ua:
+        for line in ua:
+            line = line.strip()
+            USER_AGENTs_list.append(line)
+    used_useragent = random.choice(USER_AGENTs_list)
+
     DRIVER_PATH = config.DRIVER_PATH
 
     def __init__(self, author_id, data_path, date_to, date_from):
@@ -58,15 +60,13 @@ class AuthorParser:
         self.date_from = date_from
 
         self.create_files_dir()
-        self.setup_webdriver()
+        self.setup_webdriver(new_useragent=self.used_useragent)
 
     missing_value = '-'
 
-    def setup_webdriver(self):
+    def setup_webdriver(self, new_useragent):
         """Settings for a selenium web driver
         Changes a self.driver attribute"""
-
-        new_useragent = random.choice(self.USER_AGENTS)
 
         profile = webdriver.FirefoxProfile()
         profile.set_preference("general.useragent.override", new_useragent)
@@ -98,17 +98,6 @@ class AuthorParser:
         print("Getting author's page")
         self.driver.get(author_page_url)
         print("Done")
-
-        login = self.driver.find_element_by_id('login')
-        login.send_keys(Secrets.elib_login)
-        time.sleep(10)
-
-        password = self.driver.find_element_by_id('password')
-        password.send_keys(Secrets.elib_password)
-        password.send_keys(Keys.RETURN)
-        time.sleep(10)
-
-        self.driver.get(author_page_url)
 
         self.driver.find_element_by_xpath('//*[@id="hdr_years"]').click()
         time.sleep(20)
@@ -148,10 +137,28 @@ class AuthorParser:
             print("Sleeping for", sleep_seconds, "seconds")
 
             time.sleep(sleep_seconds)
+        return page_number
 
-    def download_page_of_publications(self):
+    def authorization(self):
+        author_page_url = f'https://www.elibrary.ru/author_items.asp?authorid={self.author_id}'
+        print("Author page URL:", author_page_url)
+
+        print("Getting author's page")
+        self.driver.get(author_page_url)
+        print("Done")
+
+        login = self.driver.find_element_by_id('login')
+        login.send_keys(Secrets.elib_login)
+        time.sleep(10)
+
+        password = self.driver.find_element_by_id('password')
+        password.send_keys(Secrets.elib_password)
+        password.send_keys(Keys.RETURN)
+        time.sleep(10)
+
+    def download_page_of_publications(self, page_number):
         """Gets the web-page of the author's publications"""
-        page_number = 1
+        request_number = page_number
 
         for publication in self.publications:
             link_of_page = publication.link
@@ -168,10 +175,17 @@ class AuthorParser:
             with open(publication_data_dir/f'{page_id}.html', 'a', encoding='utf-8') as f:
                 f.write(self.driver.page_source)
 
-            print("Downloading page number", page_number)
-            page_number += 1
+            print("Downloading page number", request_number)
+            request_number += 1
 
-            sleep_seconds = random.randint(5, 15)
+            if request_number % 90 == 0:
+                previous_user_agent = self.used_useragent
+                self.used_useragent = random.choice(self.USER_AGENTs_list)
+                while previous_user_agent == self.used_useragent:
+                    self.used_useragent = random.choice(self.USER_AGENTs_list)
+                self.setup_webdriver(new_useragent=self.used_useragent)
+
+            sleep_seconds = random.randint(3, 7)
             print("Sleeping for", sleep_seconds, "seconds")
 
             time.sleep(sleep_seconds)
