@@ -1,0 +1,108 @@
+Mozilla/5.0 (*Windows NT 6.2*WOW64*) Goanna* PaleMoon/27.2*,
+Mozilla/5.0 (*Windows NT 6.2*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.1*Win64? x64*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.1*WOW64*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.1*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.0;*Win64? x64*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.0*WOW64*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.0*) Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Linux*x86_64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Linux*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 10.0*Win64? x64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 10.0*WOW64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 10.0*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.4*Win64? x64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.4*WOW64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.4*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.3*Win64? x64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.3*WOW64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.3*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.2*Win64? x64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.2*WOW64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.2*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.1*Win64? x64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.1*WOW64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.1*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.0;*Win64? x64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.0*WOW64*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 6.0*) Gecko* Goanna* PaleMoon/27.2*
+Mozilla/5.0 (*Linux*x86_64*) Gecko* Goanna* Firefox* PaleMoon/27.2*
+Mozilla/5.0 (*Linux*) Gecko* Goanna* Firefox* PaleMoon/27.2*
+Mozilla/5.0 (*Windows NT 5.1*) *Firefox/* 360Spider*
+Mozilla/5.0 (*Windows NT 6.2*Win64? x64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.2*WOW64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.2*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.1*Win64? x64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.1*WOW64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.1*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.0*WOW64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 6.0*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 5.2*WOW64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 5.2*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 5.1*WOW64*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/5.0 (*Windows NT 5.1*) applewebkit* (*khtml*like*gecko*) Chrome/* Safari/*; 360Spider*
+Mozilla/4.0 (*Windows NT 10.0*Win64? x64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 10.0*WOW64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 10.0*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.4*Win64? x64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.4*WOW64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.4*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.3*Win64? x64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.3*WOW64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.3*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.2*Win64? x64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.2*WOW64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.2*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.1*Win64? x64*) Gecko* Firefox/78.0*
+Mozilla/4.0 (*Windows NT 6.1*WOW64*) Gecko* Firefox/78.0*
+Mozilla/5.0 (*Ubuntu; Linux x86_64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Ubuntu*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Linux i686 on x86_64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Linux*x86_64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Linux*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 10.0*Win64? x64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 10.0*WOW64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 10.0*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.4*Win64? x64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.4*WOW64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.4*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.3*Win64? x64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.3*WOW64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.3*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.2*Win64? x64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.2*WOW64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.2*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.1*Win64? x64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.1*WOW64*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 6.1*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?15*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?14*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?13*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?12*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?11*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?10*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X 10?9*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Mac OS X*) Gecko* Firefox/77.0*
+Mozilla/5.0 (masking-agent; rv:*) Gecko* Firefox/77.0*
+Mozilla/5.0 (*Windows NT 10.0*Win64? x64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 10.0*WOW64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 10.0*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.4*Win64? x64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.4*WOW64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.4*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.3*Win64? x64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.3*WOW64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.3*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.2*Win64? x64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.2*WOW64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.2*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.1*Win64? x64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.1*WOW64*) Gecko*/77.0*
+Mozilla/5.0 (*Windows NT 6.1*) Gecko*/77.0*
+Mozilla/5.0 (*Mac OS X 10?13*) Gecko*/77.0*
+Mozilla/5.0 (*Mac OS X 10?12*) Gecko*/77.0*
+Mozilla/5.0 (*Mac OS X 10?11*) Gecko*/77.0*
+Mozilla/5.0 (*Mac OS X 10?10*) Gecko*/77.0*
+Mozilla/5.0 (*Mac OS X 10?9*) Gecko*/77.0*
+Mozilla/5.0 (*Mac OS X*) Gecko*/77.0*
+
