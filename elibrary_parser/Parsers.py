@@ -3,6 +3,7 @@ from pathlib import Path
 import random
 import time
 import bs4
+import re
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -136,6 +137,91 @@ class AuthorParser:
 
             time.sleep(sleep_seconds)
 
+    def download_page_of_publications(self):
+        """Gets the web-page of the author's publications"""
+        page_number = 1
+
+        for publication in self.publications:
+            link_of_page = publication.link
+            print('getting publication page')
+            self.driver.get(link_of_page)
+            print('Done')
+
+            page_id = link_of_page.split('=')
+            page_id = page_id[1]
+
+            publication_data_dir = self.files_dir/'publications'
+            publication_data_dir.mkdir(exist_ok=True)
+
+            with open(publication_data_dir/f'{page_id}.html', 'a', encoding='utf-8') as f:
+                f.write(self.driver.page_source)
+
+            print("Downloading page number", page_number)
+            page_number += 1
+
+            sleep_seconds = random.randint(5, 15)
+            print("Sleeping for", sleep_seconds, "seconds")
+
+            time.sleep(sleep_seconds)
+
+    @staticmethod
+    def publication_get_abstract(soup):
+
+        abstract = soup.find('div', id="abstract1")
+
+        if not abstract:
+            abstract = AuthorParser.missing_value
+        else:
+            abstract = abstract.text
+
+        return abstract
+
+    @staticmethod
+    def publication_get_metrics(soup):
+
+        metrics = soup.find_all('tr', valign="bottom", align="left")
+
+        if not metrics:
+
+            print('No metrics found')
+
+        else:
+
+            metrics = (metrics[0].text, metrics[1].text) # полученные метрики без регистрации (и смс)
+
+        return metrics
+
+    @staticmethod
+    def publication_get_article_type(soup):
+
+        article_type = soup.find('td', width="574", valign="middle")
+
+        if not article_type:
+
+            print('No article type found')
+
+        else:
+
+            article_type = article_type.text
+
+        return article_type
+
+    @staticmethod
+    def publication_get_affiliations(soup):
+
+        affiliations = soup.find_all('span', {'class':'help1 pointer'})
+
+        if not affiliations:
+
+            print('No affiliations found')
+
+        else:
+            a = str(affiliations)
+            a = re.sub(r'<.+?>', '', a) # не достает некоторые аффилиации (поиск по color?)
+
+            affiliations = a
+
+        return affiliations
 
     @staticmethod
     def get_title(table_cell: bs4.element.ResultSet) -> str:
@@ -228,7 +314,8 @@ class AuthorParser:
                     publication.authors,
                     publication.info,
                     publication.link,
-                    publication.year
+                    publication.year,
+                    publication.abstract
                 ]
                 wr.writerow(saving_publication)
 
@@ -256,8 +343,31 @@ class AuthorParser:
                     title=self.get_title(table_cell),
                     authors=self.get_authors(table_cell),
                     info=info,
-                    link=self.get_link(table_cell),
+                    link=self.get_link(table_cell)
                 )
+
                 publication.get_year()
+
+                self.publications.append(publication)
+
+    def parse_publication_info(self):
+
+        for publication in self.publications:
+            article_serial = publication.link.split('=')[1]
+
+            print('Parsing publication №' + article_serial)
+
+            html_name = (article_serial + '.html')
+
+            publication_data_dir = self.files_dir / 'publications' / html_name
+
+            with open(publication_data_dir, "r", encoding="utf8") as f:
+                page_text = f.read()
+                soup = BeautifulSoup(page_text, 'html.parser')
+
+                publication.abstract = self.publication_get_abstract(soup),
+                publication.affiliations = self.publication_get_affiliations(soup),
+                publication.metrics = self.publication_get_metrics(soup),
+                publication.article_type = self.publication_get_article_type(soup)
 
                 self.publications.append(publication)
