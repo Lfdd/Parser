@@ -71,7 +71,7 @@ class AuthorParser:
         profile = webdriver.FirefoxProfile()
         profile.set_preference("general.useragent.override", new_useragent)
         options = Options()
-        options.headless = False
+        options.headless = True
 
         self.driver = webdriver.Firefox(profile, executable_path=self.DRIVER_PATH, options=options)
 
