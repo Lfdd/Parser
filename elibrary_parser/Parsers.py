@@ -315,7 +315,10 @@ class AuthorParser:
                     publication.info,
                     publication.link,
                     publication.year,
-                    publication.abstract
+                    publication.abstract,
+                    publication.metrics,
+                    publication.article_type,
+                    publication.affiliations
                 ]
                 wr.writerow(saving_publication)
 
@@ -370,4 +373,4 @@ class AuthorParser:
                 publication.metrics = self.publication_get_metrics(soup),
                 publication.article_type = self.publication_get_article_type(soup)
 
-                self.publications.append(publication)
+            print(publication.title, publication.abstract, publication.metrics, publication.article_type)
